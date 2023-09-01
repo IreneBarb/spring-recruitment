@@ -12,8 +12,8 @@ pipeline {
         stage('Static Analysis - Java') {
             steps {
                 script {
-                    // Download Checkstyle JAR
-                    sh 'wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar -O checkstyle.jar'
+                    // Run the curl command inside a Docker container
+                    sh 'docker run --rm -v ${WORKSPACE}:/workspace ubuntu curl -L -o /workspace/checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar'
 
                     // Find all Java files in the workspace directory
                     def javaFiles = findFiles(glob: '**/*.java')
@@ -22,11 +22,12 @@ pipeline {
                     javaFiles.each { file ->
                         def filePath = file.path
                         echo "Running Checkstyle on ${filePath}"
-                        sh "java -jar checkstyle.jar -c sun_checks.xml ${filePath}"
+                        sh "docker run --rm -v ${WORKSPACE}:/workspace ubuntu java -jar /workspace/checkstyle.jar -c sun_checks.xml ${filePath}"
                     }
                 }
             }
         }
+
 //
 //         stage('Dynamic Analysis') {
 //             steps {

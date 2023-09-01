@@ -27,22 +27,22 @@ pipeline {
                 }
             }
         }
-
-        stage('Dynamic Analysis') {
-            steps {
-                // Dynamic security testing
-//                 sh 'nmap_scan_commands_here'
-//                 sh 'clair_scan_commands_here'
-//                 sh 'sqlmap_commands_here'
-            }
-        }
-
-        stage('Fuzz Testing') {
-            steps {
-                // Fuzz testing against the RESTful service
-//                 sh 'fuzz_testing_commands_here'
-            }
-        }
+//
+//         stage('Dynamic Analysis') {
+//             steps {
+//                 // Dynamic security testing
+// //                 sh 'nmap_scan_commands_here'
+// //                 sh 'clair_scan_commands_here'
+// //                 sh 'sqlmap_commands_here'
+//             }
+//         }
+//
+//         stage('Fuzz Testing') {
+//             steps {
+//                 // Fuzz testing against the RESTful service
+// //                 sh 'fuzz_testing_commands_here'
+//             }
+//         }
 
         stage('Build') {
             steps {

@@ -2,48 +2,28 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your source code from your version control system (e.g., Git)
-                checkout scm
-            }
-        }
-
-        stage('Static Analysis - Java') {
+        stage('Download Checkstyle JAR') {
             steps {
                 script {
-                    // Run the curl command inside a Docker container
-                    sh 'docker run --rm -v ${WORKSPACE}:/workspace ubuntu curl -L -o /workspace/checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar'
-
-                    // Find all Java files in the workspace directory
-                    def javaFiles = findFiles(glob: '**/*.java')
-
-                    // Iterate over Java files and run Checkstyle
-                    javaFiles.each { file ->
-                        def filePath = file.path
-                        echo "Running Checkstyle on ${filePath}"
-                        sh "docker run --rm -v ${WORKSPACE}:/workspace ubuntu java -jar /workspace/checkstyle.jar -c sun_checks.xml ${filePath}"
+                    def response = httpRequest(
+                        url: 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar',
+                        httpMode: 'GET',
+                        outputFile: 'checkstyle.jar'
+                    )
+                    if (response.status == 200) {
+                        echo "Download successful"
+                    } else {
+                        error "Failed to download Checkstyle JAR"
                     }
                 }
             }
         }
 
-//
-//         stage('Dynamic Analysis') {
-//             steps {
-//                 // Dynamic security testing
-// //                 sh 'nmap_scan_commands_here'
-// //                 sh 'clair_scan_commands_here'
-// //                 sh 'sqlmap_commands_here'
-//             }
-//         }
-//
-//         stage('Fuzz Testing') {
-//             steps {
-//                 // Fuzz testing against the RESTful service
-// //                 sh 'fuzz_testing_commands_here'
-//             }
-//         }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Build') {
             steps {
@@ -56,6 +36,20 @@ pipeline {
             steps {
                 // Add your testing commands here
                 sh 'echo "Running tests..."'
+            }
+        }
+
+        stage('Static Analysis - Java') {
+            steps {
+                // Download Checkstyle JAR if not already downloaded (you can reuse the code from the "Download Checkstyle JAR" stage)
+                script {
+                    def javaFiles = findFiles(glob: '**/*.java')
+                    for (file in javaFiles) {
+                        def filePath = file.path
+                        echo "Running Checkstyle on ${filePath}"
+                        sh "java -jar checkstyle.jar -c sun_checks.xml ${filePath}"
+                    }
+                }
             }
         }
 

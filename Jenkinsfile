@@ -1,3 +1,5 @@
+import org.jenkinsci.plugins.workflow.steps.jenkinsfile.JenkinsFileRunnerStep
+
 pipeline {
     agent any
 
@@ -29,6 +31,7 @@ pipeline {
             steps {
                 // Add your build commands here
                 sh 'echo "Building the project..."'
+                sh 'your_build_command_here'
             }
         }
 
@@ -36,6 +39,7 @@ pipeline {
             steps {
                 // Add your testing commands here
                 sh 'echo "Running tests..."'
+                sh 'your_test_command_here'
             }
         }
 
@@ -57,6 +61,7 @@ pipeline {
             steps {
                 // Add your deployment commands here
                 sh 'echo "Deploying the application..."'
+                sh 'your_deploy_command_here'
             }
         }
     }

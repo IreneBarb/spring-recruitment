@@ -1,0 +1,1637 @@
+Index: src/main/java/com/unipi/protal/recruitment/model/Quiz.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Quiz.java b/src/main/java/com/unipi/protal/recruitment/model/Quiz.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Quiz.java	
++++ /dev/null	
+@@ -1,38 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-import jakarta.persistence.*;
+-
+-@Entity
+-@Table(name = "quiz") // Specify the name of the database table
+-public class Quiz {
+-    @Id
+-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+-    private Long id;
+-
+-    private String name;
+-
+-    public Quiz() {
+-    }
+-
+-    public Quiz(String name) {
+-        this.name = name;
+-    }
+-
+-    // Getter and setter methods for id
+-    public Long getId() {
+-        return id;
+-    }
+-
+-    public void setId(Long id) {
+-        this.id = id;
+-    }
+-
+-    // Getter and setter methods for name
+-    public String getName() {
+-        return name;
+-    }
+-
+-    public void setName(String name) {
+-        this.name = name;
+-    }
+-}
+\ No newline at end of file
+Index: src/main/java/com/unipi/protal/recruitment/model/Question.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Question.java b/src/main/java/com/unipi/protal/recruitment/model/Question.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Question.java	
++++ /dev/null	
+@@ -1,97 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-import jakarta.persistence.*;
+-
+-@Entity
+-@Table(name = "question") // Specify the name of the database table
+-public class Question {
+-    @Id
+-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+-    private Long id;
+-
+-    private String questionText;
+-    private String option1;
+-    private String option2;
+-    private String option3;
+-    private String option4;
+-    private int correctOption;
+-    private int quizId;
+-
+-    public Question() {
+-    }
+-
+-    public Question(String questionText, String option1, String option2, String option3, String option4, int correctOption, int quizId) {
+-        this.questionText = questionText;
+-        this.option1 = option1;
+-        this.option2 = option2;
+-        this.option3 = option3;
+-        this.option4 = option4;
+-        this.correctOption = correctOption;
+-        this.quizId = quizId;
+-    }
+-
+-    public Long getId() {
+-        return id;
+-    }
+-
+-    public void setId(Long id) {
+-        this.id = id;
+-    }
+-
+-    // Getter and setter methods for questionText
+-    public String getQuestionText() {
+-        return questionText;
+-    }
+-
+-    public void setQuestionText(String questionText) {
+-        this.questionText = questionText;
+-    }
+-
+-    public int getCorrectOption() {
+-        return correctOption;
+-    }
+-
+-    public void setCorrectOption(int correctOption) {
+-        this.correctOption = correctOption;
+-    }
+-
+-    public String getOption1() {
+-        return option1;
+-    }
+-
+-    public void setOption1(String option1) {
+-        this.option1 = option1;
+-    }
+-
+-    public String getOption2() {
+-        return option2;
+-    }
+-
+-    public void setOption2(String option2) {
+-        this.option2 = option2;
+-    }
+-
+-    public String getOption3() {
+-        return option3;
+-    }
+-
+-    public void setOption3(String option3) {
+-        this.option3 = option3;
+-    }
+-
+-    public String getOption4() {
+-        return option4;
+-    }
+-
+-    public void setOption4(String option4) {
+-        this.option4 = option4;
+-    }
+-
+-    public int getQuizId() {
+-        return quizId;
+-    }
+-
+-    public void setQuizId(int quizId) {
+-        this.quizId = quizId;
+-    }
+-}
+Index: src/main/java/com/unipi/protal/recruitment/controller/QuizController.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/controller/QuizController.java b/src/main/java/com/unipi/protal/recruitment/controller/QuizController.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/controller/QuizController.java	
++++ /dev/null	
+@@ -1,41 +0,0 @@
+-package com.unipi.protal.recruitment.controller;
+-
+-import com.unipi.protal.recruitment.model.Question;
+-import com.unipi.protal.recruitment.model.UserQuizAnswer;
+-import com.unipi.protal.recruitment.service.QuestionsService;
+-import com.unipi.protal.recruitment.service.UserQuizAnswerService;
+-import org.aspectj.weaver.patterns.TypePatternQuestions;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-import java.util.List;
+-
+-@RestController
+-@RequestMapping("/api/quiz")
+-public class QuizController {
+-    @Autowired
+-    private UserQuizAnswerService userQuizAnswerService;
+-    @Autowired
+-    private QuestionsService questionsService;
+-
+-    @CrossOrigin(origins = "http://localhost:4200")
+-    @PostMapping("/answer")
+-    public ResponseEntity<UserQuizAnswer> saveUserQuizAnswer(@RequestBody UserQuizAnswer answer) throws Exception {
+-        UserQuizAnswer savedAnswer = userQuizAnswerService.saveUserQuizAnswer(answer);
+-        return new ResponseEntity<>(savedAnswer, HttpStatus.CREATED);
+-    }
+-    @CrossOrigin(origins = "http://localhost:4200")
+-    @GetMapping("/answers/{userId}")
+-    public ResponseEntity<List<UserQuizAnswer>> getUserQuizAnswers(@PathVariable Long userId) {
+-        List<UserQuizAnswer> answers = userQuizAnswerService.getUserQuizAnswers(userId);
+-        return new ResponseEntity<>(answers, HttpStatus.OK);
+-    }
+-    @CrossOrigin(origins = "http://localhost:4200")
+-    @GetMapping("/questions/{quizId}")
+-    public ResponseEntity<List<Question>> getQuizQuestions(@PathVariable Long quizId) {
+-        List<Question> questions = questionsService.getQuizQuestions(quizId);
+-        return new ResponseEntity<>(questions, HttpStatus.OK);
+-    }
+-}
+Index: .gitignore
+===================================================================
+diff --git a/.gitignore b/.gitignore
+deleted file mode 100644
+--- a/.gitignore	
++++ /dev/null	
+@@ -1,33 +0,0 @@
+-HELP.md
+-target/
+-!.mvn/wrapper/maven-wrapper.jar
+-!**/src/main/**/target/
+-!**/src/test/**/target/
+-
+-### STS ###
+-.apt_generated
+-.classpath
+-.factorypath
+-.project
+-.settings
+-.springBeans
+-.sts4-cache
+-
+-### IntelliJ IDEA ###
+-.idea
+-*.iws
+-*.iml
+-*.ipr
+-
+-### NetBeans ###
+-/nbproject/private/
+-/nbbuild/
+-/dist/
+-/nbdist/
+-/.nb-gradle/
+-build/
+-!**/src/main/**/build/
+-!**/src/test/**/build/
+-
+-### VS Code ###
+-.vscode/
+Index: pom.xml
+===================================================================
+diff --git a/pom.xml b/pom.xml
+deleted file mode 100644
+--- a/pom.xml	
++++ /dev/null	
+@@ -1,71 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+-	<modelVersion>4.0.0</modelVersion>
+-	<parent>
+-		<groupId>org.springframework.boot</groupId>
+-		<artifactId>spring-boot-starter-parent</artifactId>
+-		<version>3.0.8</version>
+-		<relativePath/> <!-- lookup parent from repository -->
+-	</parent>
+-	<groupId>com.unipi.protal</groupId>
+-	<artifactId>recruitment</artifactId>
+-	<version>0.0.1-SNAPSHOT</version>
+-	<name>recruitment</name>
+-	<description>masters project</description>
+-	<properties>
+-		<java.version>17</java.version>
+-	</properties>
+-	<dependencies>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-web</artifactId>
+-		</dependency>
+-
+-		<dependency>
+-			<groupId>org.hibernate</groupId>
+-			<artifactId>hibernate-core</artifactId>
+-			<version>6.2.6.Final</version>
+-			<type>pom</type>
+-		</dependency>
+-
+-		<dependency>
+-			<groupId>mysql</groupId>
+-			<artifactId>mysql-connector-java</artifactId>
+-			<version>8.0.27</version> <!-- Replace this version with the appropriate version you want to use -->
+-		</dependency>
+-
+-		<dependency>
+-			<groupId>org.projectlombok</groupId>
+-			<artifactId>lombok</artifactId>
+-			<optional>true</optional>
+-		</dependency>
+-		<dependency>
+-			<groupId>org.springframework.boot</groupId>
+-			<artifactId>spring-boot-starter-test</artifactId>
+-			<scope>test</scope>
+-		</dependency>
+-	</dependencies>
+-
+-	<build>
+-		<plugins>
+-			<plugin>
+-				<groupId>org.springframework.boot</groupId>
+-				<artifactId>spring-boot-maven-plugin</artifactId>
+-				<configuration>
+-					<excludes>
+-						<exclude>
+-							<groupId>org.projectlombok</groupId>
+-							<artifactId>lombok</artifactId>
+-						</exclude>
+-					</excludes>
+-				</configuration>
+-			</plugin>
+-		</plugins>
+-	</build>
+-
+-</project>
+Index: src/main/java/com/unipi/protal/recruitment/repository/RecruiterRepository.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/repository/RecruiterRepository.java b/src/main/java/com/unipi/protal/recruitment/repository/RecruiterRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/repository/RecruiterRepository.java	
++++ /dev/null	
+@@ -1,11 +0,0 @@
+-package com.unipi.protal.recruitment.repository;
+-
+-import com.unipi.protal.recruitment.model.Recruiter;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-import org.springframework.stereotype.Repository;
+-
+-
+-@Repository
+-public interface RecruiterRepository extends JpaRepository<Recruiter,Long> {
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/RecruitmentApplication.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/RecruitmentApplication.java b/src/main/java/com/unipi/protal/recruitment/RecruitmentApplication.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/RecruitmentApplication.java	
++++ /dev/null	
+@@ -1,13 +0,0 @@
+-package com.unipi.protal.recruitment;
+-
+-import org.springframework.boot.SpringApplication;
+-import org.springframework.boot.autoconfigure.SpringBootApplication;
+-
+-@SpringBootApplication
+-public class RecruitmentApplication {
+-
+-	public static void main(String[] args) {
+-		SpringApplication.run(RecruitmentApplication.class, args);
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/repository/CandidateRepository.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/repository/CandidateRepository.java b/src/main/java/com/unipi/protal/recruitment/repository/CandidateRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/repository/CandidateRepository.java	
++++ /dev/null	
+@@ -1,11 +0,0 @@
+-package com.unipi.protal.recruitment.repository;
+-
+-import com.unipi.protal.recruitment.model.Candidate;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-import org.springframework.stereotype.Repository;
+-
+-
+-@Repository
+-public interface CandidateRepository extends JpaRepository<Candidate, Long> {
+-
+-}
+Index: .mvn/wrapper/maven-wrapper.properties
+===================================================================
+diff --git a/.mvn/wrapper/maven-wrapper.properties b/.mvn/wrapper/maven-wrapper.properties
+deleted file mode 100644
+--- a/.mvn/wrapper/maven-wrapper.properties	
++++ /dev/null	
+@@ -1,18 +0,0 @@
+-# Licensed to the Apache Software Foundation (ASF) under one
+-# or more contributor license agreements.  See the NOTICE file
+-# distributed with this work for additional information
+-# regarding copyright ownership.  The ASF licenses this file
+-# to you under the Apache License, Version 2.0 (the
+-# "License"); you may not use this file except in compliance
+-# with the License.  You may obtain a copy of the License at
+-#
+-#   https://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing,
+-# software distributed under the License is distributed on an
+-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-# KIND, either express or implied.  See the License for the
+-# specific language governing permissions and limitations
+-# under the License.
+-distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.8.7/apache-maven-3.8.7-bin.zip
+-wrapperUrl=https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.1.1/maven-wrapper-3.1.1.jar
+Index: src/main/java/com/unipi/protal/recruitment/controller/UserController.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/controller/UserController.java b/src/main/java/com/unipi/protal/recruitment/controller/UserController.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/controller/UserController.java	
++++ /dev/null	
+@@ -1,37 +0,0 @@
+-package com.unipi.protal.recruitment.controller;
+-
+-import com.unipi.protal.recruitment.exception.ResourceNotFoundException;
+-import com.unipi.protal.recruitment.model.Candidate;
+-import com.unipi.protal.recruitment.model.Credentials;
+-import com.unipi.protal.recruitment.model.User;
+-import com.unipi.protal.recruitment.service.UserService;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-import java.util.List;
+-
+-
+-@RestController
+-@RequestMapping("/api/")
+-public class UserController {
+-
+-	@Autowired
+-	private UserService userService;
+-
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/users")
+-	public List<User> getAllUsers() {
+-		return userService.findAll();
+-	}
+-
+-	// get user by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PostMapping("/users/login")
+-	public ResponseEntity<User> loginUser(@RequestBody Credentials credentials) {
+-		User user = (User) userService.loginUser(credentials.getUsername(), credentials.getPassword());
+-//				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with these credentials"));
+-		return ResponseEntity.ok(user);
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/Credentials.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Credentials.java b/src/main/java/com/unipi/protal/recruitment/model/Credentials.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Credentials.java	
++++ /dev/null	
+@@ -1,31 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-public class Credentials {
+-    private String username;
+-    private String password;
+-
+-    public Credentials(){
+-
+-    }
+-
+-    public Credentials(String username, String password) {
+-        this.username = username;
+-        this.password = password;
+-    }
+-
+-    public String getUsername() {
+-        return username;
+-    }
+-
+-    public void setUsername(String username) {
+-        this.username = username;
+-    }
+-
+-    public String getPassword() {
+-        return password;
+-    }
+-
+-    public void setPassword(String password) {
+-        this.password = password;
+-    }
+-}
+Index: src/main/java/com/unipi/protal/recruitment/service/QuestionsService.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/service/QuestionsService.java b/src/main/java/com/unipi/protal/recruitment/service/QuestionsService.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/service/QuestionsService.java	
++++ /dev/null	
+@@ -1,20 +0,0 @@
+-package com.unipi.protal.recruitment.service;
+-
+-import com.unipi.protal.recruitment.model.Question;
+-import com.unipi.protal.recruitment.model.UserQuizAnswer;
+-import com.unipi.protal.recruitment.repository.QuestionsRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
+-
+-import java.util.List;
+-
+-@Service
+-public class QuestionsService {
+-
+-    @Autowired
+-    private QuestionsRepository questionsRepository;
+-
+-    public List<Question> getQuizQuestions(Long quizId) {
+-        return questionsRepository.findByQuizId(quizId);
+-    }
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/Candidate.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Candidate.java b/src/main/java/com/unipi/protal/recruitment/model/Candidate.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Candidate.java	
++++ /dev/null	
+@@ -1,43 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.PrimaryKeyJoinColumn;
+-import jakarta.persistence.Table;
+-
+-@Entity
+-@Table(name = "candidate")
+-@PrimaryKeyJoinColumn(name = "id")
+-public class Candidate extends User {
+-	private String birthDate;
+-
+-	private String notes;
+-
+-	public Candidate() {
+-
+-	}
+-
+-	public Candidate(String username, String password, String firstName, String lastName, String email,
+-			String birthDate, String notes) {
+-		super(username, password, firstName, lastName, email);
+-		this.birthDate = birthDate;
+-		this.notes = notes;
+-	}
+-
+-	public String getBirthDate() {
+-		return birthDate;
+-	}
+-
+-	public void setBirthDate(String birthDate) {
+-		this.birthDate = birthDate;
+-	}
+-
+-	public String getNotes() {
+-		return notes;
+-	}
+-
+-	public void setNotes(String notes) {
+-		this.notes = notes;
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/controller/AppointmentController.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/controller/AppointmentController.java b/src/main/java/com/unipi/protal/recruitment/controller/AppointmentController.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/controller/AppointmentController.java	
++++ /dev/null	
+@@ -1,81 +0,0 @@
+-package com.unipi.protal.recruitment.controller;
+-
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-import com.unipi.protal.recruitment.exception.ResourceNotFoundException;
+-import com.unipi.protal.recruitment.model.Appointment;
+-import com.unipi.protal.recruitment.repository.AppointmentRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.CrossOrigin;
+-import org.springframework.web.bind.annotation.DeleteMapping;
+-import org.springframework.web.bind.annotation.GetMapping;
+-import org.springframework.web.bind.annotation.PathVariable;
+-import org.springframework.web.bind.annotation.PostMapping;
+-import org.springframework.web.bind.annotation.PutMapping;
+-import org.springframework.web.bind.annotation.RequestBody;
+-import org.springframework.web.bind.annotation.RequestMapping;
+-import org.springframework.web.bind.annotation.RestController;
+-
+-
+-@RestController
+-@RequestMapping("/api/")
+-public class AppointmentController {
+-
+-	@Autowired
+-	private AppointmentRepository appointmentRepository;
+-
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/appointments")
+-	public List<Appointment> getAllAppointments() {
+-		return appointmentRepository.findAll();
+-	}
+-
+-	// create appointment
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PostMapping("/appointments")
+-	public Appointment createCandidate(@RequestBody Appointment appointment) {
+-		return appointmentRepository.save(appointment);
+-	}
+-
+-	// get appointment by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/appointments/{id}")
+-	public ResponseEntity<Appointment> getAppointmentById(@PathVariable Long id) {
+-		Appointment appointment = (Appointment) appointmentRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("Appointment doesn't exist with id: " + id));
+-		return ResponseEntity.ok(appointment);
+-	}
+-
+-	// update appointment
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PutMapping("/appointments/{id}")
+-	public ResponseEntity<Appointment> updateAppointment(@PathVariable Long id,
+-			@RequestBody Appointment appointmentDetails) {
+-		Appointment appointment = (Appointment) appointmentRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("Appointment doesn't exist with id: " + id));
+-
+-		appointment.setCandidateId(appointmentDetails.getCandidateId());
+-		appointment.setRecruiterId(appointmentDetails.getRecruiterId());
+-		appointment.setLocation(appointmentDetails.getLocation());
+-		appointment.setDateTime(appointmentDetails.getDateTime()); 
+-
+-		Appointment updatedAppointment = appointmentRepository.save(appointment);
+-		return ResponseEntity.ok(updatedAppointment);
+-	}
+-
+-	// delete appointment by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@DeleteMapping("/appointments/{id}")
+-	public ResponseEntity<Map<String, Boolean>> deleteAppointment(@PathVariable Long id) {
+-		Appointment appointment = (Appointment) appointmentRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("Appointment doesn't exist with id: " + id));
+-		appointmentRepository.delete(appointment);
+-		Map<String, Boolean> response = new HashMap<>();
+-		response.put("deleted", Boolean.TRUE);
+-		return ResponseEntity.ok(response);
+-	}
+-
+-}
+Index: src/test/java/com/unipi/protal/recruitment/RecruitmentApplicationTests.java
+===================================================================
+diff --git a/src/test/java/com/unipi/protal/recruitment/RecruitmentApplicationTests.java b/src/test/java/com/unipi/protal/recruitment/RecruitmentApplicationTests.java
+deleted file mode 100644
+--- a/src/test/java/com/unipi/protal/recruitment/RecruitmentApplicationTests.java	
++++ /dev/null	
+@@ -1,13 +0,0 @@
+-package com.unipi.protal.recruitment;
+-
+-import org.junit.jupiter.api.Test;
+-import org.springframework.boot.test.context.SpringBootTest;
+-
+-@SpringBootTest
+-class RecruitmentApplicationTests {
+-
+-	@Test
+-	void contextLoads() {
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/controller/RecruiterController.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/controller/RecruiterController.java b/src/main/java/com/unipi/protal/recruitment/controller/RecruiterController.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/controller/RecruiterController.java	
++++ /dev/null	
+@@ -1,73 +0,0 @@
+-package com.unipi.protal.recruitment.controller;
+-
+-
+-import com.unipi.protal.recruitment.exception.ResourceNotFoundException;
+-import com.unipi.protal.recruitment.model.Recruiter;
+-import com.unipi.protal.recruitment.repository.RecruiterRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-@RestController
+-@RequestMapping("/api/")
+-public class RecruiterController {
+-	@Autowired
+-	private RecruiterRepository recruiterRepository;
+-
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/recruiters")
+-	public List<Recruiter> getAllRecruiters() {
+-		return recruiterRepository.findAll();
+-	}
+-
+-	// create recruiter
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PostMapping("/recruiters")
+-	public Recruiter createRecruiter(@RequestBody Recruiter recruiter) {
+-		return recruiterRepository.save(recruiter);
+-	}
+-
+-	// get recruiter by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/recruiters/{id}")
+-	public ResponseEntity<Recruiter> getRecruiterById(@PathVariable Long id) {
+-		Recruiter recruiter = (Recruiter) recruiterRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with id: " + id));
+-		return ResponseEntity.ok(recruiter);
+-	}
+-
+-	// update recruiter
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PutMapping("/recruiters/{id}")
+-	public ResponseEntity<Recruiter> updateRecruiter(@PathVariable Long id, @RequestBody Recruiter recruiterDetails) {
+-		Recruiter recruiter = (Recruiter) recruiterRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with id: " + id));
+-
+-		recruiter.setUsername(recruiterDetails.getUsername());
+-		recruiter.setPassword(recruiterDetails.getPassword());
+-		recruiter.setLastName(recruiterDetails.getLastName());
+-		recruiter.setFirstName(recruiterDetails.getFirstName());
+-		recruiter.setLastName(recruiterDetails.getLastName());
+-		recruiter.setEmail(recruiterDetails.getEmail());
+-		recruiter.setToken(recruiterDetails.getToken());
+-
+-		Recruiter updatedRecruiter = recruiterRepository.save(recruiter);
+-		return ResponseEntity.ok(updatedRecruiter);
+-	}
+-
+-	// delete recruiter by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@DeleteMapping("/recruiters/{id}")
+-	public ResponseEntity<Map<String, Boolean>> deleteRecruiter(@PathVariable Long id) {
+-		Recruiter recruiter = (Recruiter) recruiterRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with id: " + id));
+-		recruiterRepository.delete(recruiter);
+-		Map<String, Boolean> response = new HashMap<>();
+-		response.put("deleted", Boolean.TRUE);
+-		return ResponseEntity.ok(response);
+-	}
+-}
+Index: src/main/java/com/unipi/protal/recruitment/controller/CandidateController.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/controller/CandidateController.java b/src/main/java/com/unipi/protal/recruitment/controller/CandidateController.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/controller/CandidateController.java	
++++ /dev/null	
+@@ -1,83 +0,0 @@
+-package com.unipi.protal.recruitment.controller;
+-
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-import com.unipi.protal.recruitment.exception.ResourceNotFoundException;
+-import com.unipi.protal.recruitment.model.Candidate;
+-import com.unipi.protal.recruitment.repository.CandidateRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.CrossOrigin;
+-import org.springframework.web.bind.annotation.DeleteMapping;
+-import org.springframework.web.bind.annotation.GetMapping;
+-import org.springframework.web.bind.annotation.PathVariable;
+-import org.springframework.web.bind.annotation.PostMapping;
+-import org.springframework.web.bind.annotation.PutMapping;
+-import org.springframework.web.bind.annotation.RequestBody;
+-import org.springframework.web.bind.annotation.RequestMapping;
+-import org.springframework.web.bind.annotation.RestController;
+-
+-
+-@RestController
+-@RequestMapping("/api/")
+-public class CandidateController {
+-
+-	@Autowired
+-	private CandidateRepository candidateRepository;
+-
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/candidates")
+-	public List<Candidate> getAllCandidates() {
+-		return candidateRepository.findAll();
+-	}
+-
+-	// create candidate
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PostMapping("/candidates")
+-	public Candidate createCandidate(@RequestBody Candidate candidate) {
+-		return candidateRepository.save(candidate);
+-	}
+-
+-	// get candidate by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@GetMapping("/candidates/{id}")
+-	public ResponseEntity<Candidate> getCandidateById(@PathVariable Long id) {
+-		Candidate candidate = (Candidate) candidateRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with id: " + id));
+-		return ResponseEntity.ok(candidate);
+-	}
+-
+-	// update candidate
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@PutMapping("/candidates/{id}")
+-	public ResponseEntity<Candidate> updateCandidate(@PathVariable Long id, @RequestBody Candidate candidateDetails) {
+-		Candidate candidate = (Candidate) candidateRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with id: " + id));
+-
+-		candidate.setUsername(candidateDetails.getUsername());
+-		candidate.setPassword(candidateDetails.getPassword());
+-		candidate.setLastName(candidateDetails.getLastName());
+-		candidate.setFirstName(candidateDetails.getFirstName());
+-		candidate.setLastName(candidateDetails.getLastName());
+-		candidate.setEmail(candidateDetails.getEmail());
+-		candidate.setBirthDate(candidateDetails.getBirthDate());
+-		candidate.setNotes(candidateDetails.getNotes());
+-
+-		Candidate updatedCandidate = candidateRepository.save(candidate);
+-		return ResponseEntity.ok(updatedCandidate);
+-	}
+-
+-	// delete candidate by id
+-	@CrossOrigin(origins = "http://localhost:4200")
+-	@DeleteMapping("/candidates/{id}")
+-	public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
+-		Candidate candidate = (Candidate) candidateRepository.findById(id)
+-				.orElseThrow(() -> new ResourceNotFoundException("User doesn't exist with id: " + id));
+-		candidateRepository.delete(candidate);
+-		Map<String, Boolean> response = new HashMap<>();
+-		response.put("deleted", Boolean.TRUE);
+-		return ResponseEntity.ok(response);
+-	}
+-}
+Index: src/main/java/com/unipi/protal/recruitment/service/UserQuizAnswerService.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/service/UserQuizAnswerService.java b/src/main/java/com/unipi/protal/recruitment/service/UserQuizAnswerService.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/service/UserQuizAnswerService.java	
++++ /dev/null	
+@@ -1,28 +0,0 @@
+-package com.unipi.protal.recruitment.service;
+-
+-import com.unipi.protal.recruitment.model.UserQuizAnswer;
+-import com.unipi.protal.recruitment.repository.UserQuizAnswerRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
+-
+-import java.util.List;
+-
+-@Service
+-public class UserQuizAnswerService {
+-    @Autowired
+-    private UserQuizAnswerRepository userQuizAnswerRepository;
+-
+-    public UserQuizAnswer saveUserQuizAnswer(UserQuizAnswer answer) throws Exception {
+-        List<UserQuizAnswer> userAnswers = getUserQuizAnswers(answer.getUserId());
+-        for(UserQuizAnswer existingAnswer: userAnswers){
+-            if(existingAnswer.getQuestionId() == answer.getQuestionId()){
+-                throw new Exception();
+-            }
+-        }
+-        return userQuizAnswerRepository.save(answer);
+-    }
+-
+-    public List<UserQuizAnswer> getUserQuizAnswers(Long userId) {
+-        return userQuizAnswerRepository.findByUserId(userId);
+-    }
+-}
+Index: src/main/java/com/unipi/protal/recruitment/repository/UserQuizAnswerRepository.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/repository/UserQuizAnswerRepository.java b/src/main/java/com/unipi/protal/recruitment/repository/UserQuizAnswerRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/repository/UserQuizAnswerRepository.java	
++++ /dev/null	
+@@ -1,12 +0,0 @@
+-package com.unipi.protal.recruitment.repository;
+-
+-import com.unipi.protal.recruitment.model.UserQuizAnswer;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-import org.springframework.stereotype.Repository;
+-
+-import java.util.List;
+-
+-@Repository
+-public interface UserQuizAnswerRepository extends JpaRepository<UserQuizAnswer, Long> {
+-    List<UserQuizAnswer> findByUserId(Long userId);
+-}
+Index: src/main/java/com/unipi/protal/recruitment/exception/ResourceNotFoundException.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/exception/ResourceNotFoundException.java b/src/main/java/com/unipi/protal/recruitment/exception/ResourceNotFoundException.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/exception/ResourceNotFoundException.java	
++++ /dev/null	
+@@ -1,14 +0,0 @@
+-package com.unipi.protal.recruitment.exception;
+-
+-import org.springframework.http.HttpStatus;
+-import org.springframework.web.bind.annotation.ResponseStatus;
+-
+-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+-public class ResourceNotFoundException extends RuntimeException {
+-	private static final long serialVersionUID = 1L;
+-
+-	public ResourceNotFoundException(String message) {
+-		super(message ); 
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/repository/QuestionsRepository.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/repository/QuestionsRepository.java b/src/main/java/com/unipi/protal/recruitment/repository/QuestionsRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/repository/QuestionsRepository.java	
++++ /dev/null	
+@@ -1,13 +0,0 @@
+-package com.unipi.protal.recruitment.repository;
+-
+-import com.unipi.protal.recruitment.model.Question;
+-import com.unipi.protal.recruitment.model.UserQuizAnswer;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-import org.springframework.stereotype.Repository;
+-
+-import java.util.List;
+-
+-@Repository
+-public interface QuestionsRepository extends JpaRepository<Question, Long> {
+-    List<Question> findByQuizId(Long quizId);
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/Recruiter.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Recruiter.java b/src/main/java/com/unipi/protal/recruitment/model/Recruiter.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Recruiter.java	
++++ /dev/null	
+@@ -1,28 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-
+-import jakarta.persistence.Entity;
+-
+-@Entity
+-public class Recruiter extends User {
+-	private String token;
+-
+-	public Recruiter() {
+-
+-	}
+-
+-	public Recruiter(String username, String password, String firstName, String lastName, String email, String token) {
+-		super(username, password, firstName, lastName, email);
+-		this.token = token;
+-	}
+-
+-	public String getToken() {
+-		return token;
+-	}
+-
+-	public void setToken(String token) {
+-		this.token = token;
+-	}
+-
+-	
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/User.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/User.java b/src/main/java/com/unipi/protal/recruitment/model/User.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/User.java	
++++ /dev/null	
+@@ -1,89 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-
+-import jakarta.persistence.*;
+-
+-@Entity
+-@Table(name = "userTable")
+-@Inheritance(strategy = InheritanceType.JOINED)
+-public abstract class User {
+-
+-	@Id
+-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private long id;
+-
+-//	@Enumerated(value = EnumType.STRING)
+-//	private Gender gender;
+-
+-	private String username;
+-
+-	private String password;
+-	
+-	private String firstName;
+-	
+-	private String lastName;
+-	
+-	private String email;
+-
+-	public User() {
+-
+-	}
+-
+-	public User(String username, String password, String firstName, String lastName, String email) {
+-		super();
+-		this.username = username;
+-		this.password = password;
+-		this.firstName = firstName;
+-		this.lastName = lastName;
+-		this.email = email;
+-	}
+-
+-	public long getId() {
+-		return id;
+-	}
+-
+-	public void setId(long id) {
+-		this.id = id;
+-	}
+-
+-	public String getUsername() {
+-		return username;
+-	}
+-
+-	public void setUsername(String username) {
+-		this.username = username;
+-	}
+-
+-	public String getPassword() {
+-		return password;
+-	}
+-
+-	public void setPassword(String password) {
+-		this.password = password;
+-	}
+-
+-	public String getFirstName() {
+-		return firstName;
+-	}
+-
+-	public void setFirstName(String firstName) {
+-		this.firstName = firstName;
+-	}
+-
+-	public String getLastName() {
+-		return lastName;
+-	}
+-
+-	public void setLastName(String lastName) {
+-		this.lastName = lastName;
+-	}
+-
+-	public String getEmail() {
+-		return email;
+-	}
+-
+-	public void setEmail(String email) {
+-		this.email = email;
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/Gender.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Gender.java b/src/main/java/com/unipi/protal/recruitment/model/Gender.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Gender.java	
++++ /dev/null	
+@@ -1,7 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-public enum Gender {
+-	MALE,
+-	FEMALE;
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/Appointment.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/Appointment.java b/src/main/java/com/unipi/protal/recruitment/model/Appointment.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/Appointment.java	
++++ /dev/null	
+@@ -1,72 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-import java.time.LocalDateTime;
+-
+-
+-import com.fasterxml.jackson.annotation.JsonFormat;
+-import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
+-import jakarta.persistence.Id;
+-
+-@Entity
+-public class Appointment {
+-
+-	@Id
+-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+-	private long id;
+-
+-	private long candidateId;
+-
+-	private long recruiterId;
+-
+-	private String location;
+-
+-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+-	private LocalDateTime dateTime;
+-
+-	public Appointment() {
+-
+-	}
+-
+-	public Appointment(long candidateId, long recruiterId, String location, LocalDateTime dateTime) {
+-		super();
+-		this.candidateId = candidateId;
+-		this.recruiterId = recruiterId;
+-		this.location = location;
+-		this.dateTime = dateTime;
+-	}
+-
+-	public long getCandidateId() {
+-		return candidateId;
+-	}
+-
+-	public void setCandidateId(long candidateId) {
+-		this.candidateId = candidateId;
+-	}
+-
+-	public long getRecruiterId() {
+-		return recruiterId;
+-	}
+-
+-	public void setRecruiterId(long recruiterId) {
+-		this.recruiterId = recruiterId;
+-	}
+-
+-	public String getLocation() {
+-		return location;
+-	}
+-
+-	public void setLocation(String location) {
+-		this.location = location;
+-	}
+-
+-	public LocalDateTime getDateTime() {
+-		return dateTime;
+-	}
+-
+-	public void setDateTime(LocalDateTime dateTime) {
+-		this.dateTime = dateTime;
+-	}
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/model/UserQuizAnswer.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/model/UserQuizAnswer.java b/src/main/java/com/unipi/protal/recruitment/model/UserQuizAnswer.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/model/UserQuizAnswer.java	
++++ /dev/null	
+@@ -1,55 +0,0 @@
+-package com.unipi.protal.recruitment.model;
+-
+-import jakarta.persistence.*;
+-
+-@Entity
+-@Table(name = "user_quiz_answer")
+-public class UserQuizAnswer {
+-    @Id
+-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+-    private Long id;
+-    private Long userId;
+-    private Long questionId;
+-    private Long selectedOption;
+-
+-    public UserQuizAnswer(){
+-
+-    }
+-    public UserQuizAnswer(Long userId, Long questionId, Long selectedOption) {
+-        this.userId = userId;
+-        this.questionId = questionId;
+-        this.selectedOption = selectedOption;
+-    }
+-
+-    public Long getId() {
+-        return id;
+-    }
+-
+-    public void setId(Long id) {
+-        this.id = id;
+-    }
+-
+-    public Long getUserId() {
+-        return userId;
+-    }
+-
+-    public void setUserId(Long userId) {
+-        this.userId = userId;
+-    }
+-
+-    public Long getQuestionId() {
+-        return questionId;
+-    }
+-
+-    public void setQuestionId(Long questionId) {
+-        this.questionId = questionId;
+-    }
+-
+-    public Long getSelectedOption() {
+-        return selectedOption;
+-    }
+-
+-    public void setSelectedOption(Long selectedOption) {
+-        this.selectedOption = selectedOption;
+-    }
+-}
+\ No newline at end of file
+Index: src/main/java/com/unipi/protal/recruitment/repository/UserRepository.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/repository/UserRepository.java b/src/main/java/com/unipi/protal/recruitment/repository/UserRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/repository/UserRepository.java	
++++ /dev/null	
+@@ -1,11 +0,0 @@
+-package com.unipi.protal.recruitment.repository;
+-
+-import com.unipi.protal.recruitment.model.User;
+-import org.springframework.context.annotation.Primary;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-
+-
+-@Primary
+-public interface UserRepository extends JpaRepository<User,Long> {
+-    public User findByUsername(String username);
+-}
+Index: src/main/java/com/unipi/protal/recruitment/service/UserService.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/service/UserService.java b/src/main/java/com/unipi/protal/recruitment/service/UserService.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/service/UserService.java	
++++ /dev/null	
+@@ -1,27 +0,0 @@
+-package com.unipi.protal.recruitment.service;
+-
+-import com.unipi.protal.recruitment.model.User;
+-import com.unipi.protal.recruitment.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
+-
+-import java.util.List;
+-
+-@Service
+-public class UserService {
+-    @Autowired
+-    private UserRepository userRepository;
+-
+-    public List<User> findAll(){
+-        return userRepository.findAll();
+-    }
+-
+-    public User loginUser(String username, String password) {
+-        User user = userRepository.findByUsername(username);
+-        if (user != null && user.getPassword().equals(password)) {
+-            return user;
+-        }
+-        return null;
+-    }
+-
+-}
+Index: src/main/java/com/unipi/protal/recruitment/repository/AppointmentRepository.java
+===================================================================
+diff --git a/src/main/java/com/unipi/protal/recruitment/repository/AppointmentRepository.java b/src/main/java/com/unipi/protal/recruitment/repository/AppointmentRepository.java
+deleted file mode 100644
+--- a/src/main/java/com/unipi/protal/recruitment/repository/AppointmentRepository.java	
++++ /dev/null	
+@@ -1,9 +0,0 @@
+-package com.unipi.protal.recruitment.repository;
+-
+-import com.unipi.protal.recruitment.model.Appointment;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-
+-
+-public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+-
+-}
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/jarRepositories.xml	
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Central Repository" />
++      <option name="url" value="https://repo.maven.apache.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/compiler.xml	
+@@ -0,0 +1,19 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <annotationProcessing>
++      <profile default="true" name="Default" enabled="true" />
++      <profile name="Maven default annotation processors profile" enabled="true">
++        <sourceOutputDir name="target/generated-sources/annotations" />
++        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
++        <outputRelativeToContentRoot value="true" />
++        <module name="recruitment" />
++      </profile>
++    </annotationProcessing>
++  </component>
++  <component name="JavacSettings">
++    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
++      <module name="recruitment" options="-parameters" />
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/vcs.xml	
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: HELP.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/HELP.md b/HELP.md
+new file mode 100644
+--- /dev/null	
++++ b/HELP.md	
+@@ -0,0 +1,23 @@
++# Read Me First
++The following was discovered as part of building this project:
++
++* The JVM level was changed from '1.8' to '17', review the [JDK Version Range](https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Versions#jdk-version-range) on the wiki for more details.
++
++# Getting Started
++
++### Reference Documentation
++For further reference, please consider the following sections:
++
++* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
++* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.8/maven-plugin/reference/html/)
++* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.8/maven-plugin/reference/html/#build-image)
++* [Spring Web](https://docs.spring.io/spring-boot/docs/3.0.8/reference/htmlsingle/#web)
++
++### Guides
++The following guides illustrate how to use some features concretely:
++
++* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
++* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
++* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
++* [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
++
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/encodings.xml	
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/workspace.xml	
+@@ -0,0 +1,189 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
++  <component name="ChangeListManager">
++    <list default="true" id="e61ea553-5d5d-4b67-8467-ae37b4f8aede" name="Changes" comment="first commit" />
++    <option name="SHOW_DIALOG" value="false" />
++    <option name="HIGHLIGHT_CONFLICTS" value="true" />
++    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
++    <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++      </list>
++    </option>
++  </component>
++  <component name="Git.Settings">
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="GithubDefaultAccount">
++    <option name="defaultAccountId" value="fdddb71b-4d20-4067-bb6c-11401977ba81" />
++  </component>
++  <component name="MarkdownSettingsMigration">
++    <option name="stateVersion" value="1" />
++  </component>
++  <component name="MavenImportPreferences">
++    <option name="generalSettings">
++      <MavenGeneralSettings>
++        <option name="mavenHome" value="Use Maven wrapper" />
++        <option name="useMavenConfig" value="true" />
++      </MavenGeneralSettings>
++    </option>
++  </component>
++  <component name="ProjectId" id="2SkW88TmF8HaOMyIEnIrf6rQdCw" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
++  <component name="ProjectViewState">
++    <option name="hideEmptyMiddlePackages" value="true" />
++    <option name="showLibraryContents" value="true" />
++  </component>
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "git-widget-placeholder": "master",
++    "last_opened_file_path": "/Users/irenebarbouni/Downloads/recruitment/src/main/java/com/unipi/protal/recruitment",
++    "project.structure.last.edited": "SDKs",
++    "project.structure.proportion": "0.15",
++    "project.structure.side.proportion": "0.2",
++    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
++  }
++}]]></component>
++  <component name="RecentsManager">
++    <key name="CopyFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/src/main/java/com/unipi/protal/recruitment" />
++    </key>
++    <key name="CopyClassDialog.RECENTS_KEY">
++      <recent name="com.unipi.protal.recruitment.controller" />
++      <recent name="com.unipi.protal.recruitment.repository" />
++    </key>
++  </component>
++  <component name="RunManager">
++    <configuration name="RecruitmentApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="com.unipi.protal.recruitment.RecruitmentApplication" />
++      <module name="recruitment" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.unipi.protal.recruitment.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="Application.RecruitmentApplication" />
++      </list>
++    </recent_temporary>
++  </component>
++  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
++  <component name="TaskManager">
++    <task active="true" id="Default" summary="Default task">
++      <changelist id="e61ea553-5d5d-4b67-8467-ae37b4f8aede" name="Changes" comment="" />
++      <created>1689690901243</created>
++      <option name="number" value="Default" />
++      <option name="presentableId" value="Default" />
++      <updated>1689690901243</updated>
++    </task>
++    <task id="LOCAL-00001" summary="first commit">
++      <option name="closed" value="true" />
++      <created>1693244062448</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1693244062448</updated>
++    </task>
++    <task id="LOCAL-00002" summary="first commit">
++      <option name="closed" value="true" />
++      <created>1693244197853</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1693244197853</updated>
++    </task>
++    <option name="localTasksCounter" value="3" />
++    <servers />
++  </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="OPEN_GENERIC_TABS">
++      <map>
++        <entry key="b25a071b-eeb5-44e7-a0ac-09fc2d55a641" value="TOOL_WINDOW" />
++      </map>
++    </option>
++    <option name="RECENT_FILTERS">
++      <map>
++        <entry key="User">
++          <value>
++            <list>
++              <RecentGroup>
++                <option name="FILTER_VALUES">
++                  <option value="IreneBarb" />
++                </option>
++              </RecentGroup>
++            </list>
++          </value>
++        </entry>
++      </map>
++    </option>
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State>
++              <option name="CUSTOM_BOOLEAN_PROPERTIES">
++                <map>
++                  <entry key="Show.Git.Branches" value="true" />
++                </map>
++              </option>
++            </State>
++          </value>
++        </entry>
++        <entry key="b25a071b-eeb5-44e7-a0ac-09fc2d55a641">
++          <value>
++            <State>
++              <option name="CUSTOM_BOOLEAN_PROPERTIES">
++                <map>
++                  <entry key="Show.Git.Branches" value="true" />
++                </map>
++              </option>
++            </State>
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="first commit" />
++    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
++  </component>
++  <component name="XDebuggerManager">
++    <breakpoint-manager>
++      <breakpoints>
++        <line-breakpoint enabled="true" type="java-line">
++          <url>file://$PROJECT_DIR$/src/main/java/com/unipi/protal/recruitment/controller/CandidateController.java</url>
++          <line>39</line>
++          <option name="timeStamp" value="4" />
++        </line-breakpoint>
++        <line-breakpoint enabled="true" type="java-line">
++          <url>file://$PROJECT_DIR$/src/main/java/com/unipi/protal/recruitment/controller/CandidateController.java</url>
++          <line>46</line>
++          <option name="timeStamp" value="5" />
++        </line-breakpoint>
++        <line-breakpoint enabled="true" type="java-line">
++          <url>file://$PROJECT_DIR$/src/main/java/com/unipi/protal/recruitment/controller/UserController.java</url>
++          <line>31</line>
++          <option name="timeStamp" value="8" />
++        </line-breakpoint>
++        <line-breakpoint enabled="true" type="java-line">
++          <url>file://$PROJECT_DIR$/src/main/java/com/unipi/protal/recruitment/controller/UserController.java</url>
++          <line>24</line>
++          <option name="timeStamp" value="10" />
++        </line-breakpoint>
++      </breakpoints>
++    </breakpoint-manager>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/misc.xml	
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="MavenProjectsManager">
++    <option name="originalFiles">
++      <list>
++        <option value="$PROJECT_DIR$/pom.xml" />
++      </list>
++    </option>
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="temurin-17" project-jdk-type="JavaSDK" />
++</project>
+\ No newline at end of file
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644

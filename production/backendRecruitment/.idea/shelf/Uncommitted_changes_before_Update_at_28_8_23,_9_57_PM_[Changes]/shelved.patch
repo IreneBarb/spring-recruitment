@@ -1,0 +1,3 @@
+diff --git a/src/main/resources/application.properties b/target/classes/application.properties
+rename from src/main/resources/application.properties
+rename to target/classes/application.properties

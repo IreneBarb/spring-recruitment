@@ -1,5 +1,3 @@
-import org.jenkinsci.plugins.workflow.steps.jenkinsfile.JenkinsFileRunnerStep
-
 pipeline {
     agent any
 

@@ -43,9 +43,8 @@ pipeline {
             steps {
                 // Download Checkstyle JAR if not already downloaded (you can reuse the code from the "Download Checkstyle JAR" stage)
                 script {
-                    def javaFiles = findFiles(glob: '**/*.java')
-                    for (file in javaFiles) {
-                        def filePath = file.path
+                    def javaFiles = sh(script: 'find . -name "*.java"', returnStdout: true).trim().split('\n')
+                    for (filePath in javaFiles) {
                         echo "Running Checkstyle on ${filePath}"
                         sh "java -jar checkstyle.jar -c sun_checks.xml ${filePath}"
                     }

@@ -18,11 +18,13 @@ pipeline {
                 }
             }
         }
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
                 // Add your build commands here
@@ -36,6 +38,7 @@ pipeline {
                 sh 'echo "Running tests..."'
             }
         }
+
         stage('Static Analysis - Java') {
             steps {
                 script {
@@ -63,6 +66,7 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy') {
             steps {
                 // Add your deployment commands here

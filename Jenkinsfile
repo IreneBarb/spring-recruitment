@@ -70,7 +70,11 @@ pipeline {
         stage('Check Sensitive Information') {
             steps {
                 script {
-                    def rootDir = '/Users/irenebarbouni/Documents/backendRecruitment/backend/src'
+                    // Define the root directory to search in (same directory as the Jenkinsfile)
+                    def rootDir = pwd()  // This gets the current directory (where the Jenkinsfile is located)
+
+                    // Define the subdirectory you want to search in (src folder)
+                    def subdirectory = 'src'
 
                     // Define a regular expression pattern for sensitive information
 //                     def sensitivePattern = /\b(?:password|pass|passwd|token|api_key|apikey|secret)\b/
@@ -80,7 +84,8 @@ pipeline {
                     def sensitiveInfoFound = false
 
                     // Find all files in the workspace
-                    def allFiles = findFiles(glob: "${rootDir}/**")
+
+                    def allFiles = findFiles(glob: "${rootDir}/${subdirectory}/**")
 
                     // Loop through all files and search for sensitive information
                     for (file in allFiles) {

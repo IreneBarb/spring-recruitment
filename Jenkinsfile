@@ -2,6 +2,15 @@ pipeline {
     agent any
 
     stages {
+        stage('Install Docker') {
+            steps {
+                sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
+                sh 'sudo sh get-docker.sh'
+                sh 'sudo usermod -aG docker $USER'
+                sh 'sudo systemctl start docker'
+                sh 'sudo systemctl enable docker'
+            }
+        }
         stage('Download Checkstyle JAR') {
             steps {
                 script {

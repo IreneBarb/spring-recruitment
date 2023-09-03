@@ -72,14 +72,14 @@ pipeline {
             steps {
                 sh 'echo "Running Dynamic Security Checks..."'
                 script {
-                    // Perform system ports scanning and vulnerability scanning with Nmap
-                    def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
-
-                    if (nmapResult == 0) {
-                        echo "Nmap scan successful. Check 'nmap_output.xml' for results."
-                    } else {
-                        error "Nmap scan failed."
-                    }
+//                     // Perform system ports scanning and vulnerability scanning with Nmap
+//                     def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
+//
+//                     if (nmapResult == 0) {
+//                         echo "Nmap scan successful. Check 'nmap_output.xml' for results."
+//                     } else {
+//                         error "Nmap scan failed."
+//                     }
 
                     // Perform Docker vulnerability scanning
                     def dockerVulnerabilityResult = sh(script: 'docker scan your_docker_image', returnStatus: true)

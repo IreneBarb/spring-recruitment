@@ -67,6 +67,38 @@ pipeline {
             }
         }
 
+        stage('Check Sensitive Information') {
+            steps {
+                script {
+                    // Define a regular expression pattern for sensitive information
+                    def sensitivePattern = /\b(?:password|pass|passwd|token|api_key|apikey|secret)\b/i
+
+                    // Flag to keep track of whether sensitive information is found
+                    def sensitiveInfoFound = false
+
+                    // Find all files in the workspace
+                    def allFiles = findFiles(glob: '**/*')
+
+                    // Loop through all files and search for sensitive information
+                    for (file in allFiles) {
+                        def filePath = file.path
+                        def fileContents = readFile(filePath)
+
+                        if (fileContents =~ sensitivePattern) {
+                            echo "Sensitive information found in ${filePath}"
+                            sensitiveInfoFound = true
+                        }
+                    }
+
+                    if (sensitiveInfoFound) {
+                        error "Sensitive information found in one or more files. Aborting the build."
+                    } else {
+                        echo "No sensitive information found."
+                    }
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 // Add your deployment commands here

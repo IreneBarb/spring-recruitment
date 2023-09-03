@@ -2,6 +2,11 @@ pipeline {
     agent any
 
     stages {
+        stage('Install Homebrew') {
+            steps {
+                sh '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+            }
+        }
         stage('Install Docker') {
              steps {
                  sh 'brew install --cask docker'

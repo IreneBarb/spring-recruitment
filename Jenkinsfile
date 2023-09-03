@@ -68,39 +68,39 @@ pipeline {
 //             }
 //         }
 
-//         stage('Dynamic Security Checks') {
-//             steps {
-//                 sh 'echo "Running Dynamic Security Checks..."'
-//                 script {
-//                     // Perform system ports scanning and vulnerability scanning with Nmap
-//                     def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
-//
-//                     if (nmapResult == 0) {
-//                         echo "Nmap scan successful. Check 'nmap_output.xml' for results."
-//                     } else {
-//                         error "Nmap scan failed."
-//                     }
-//
-//                     // Perform Docker vulnerability scanning
-//                     def dockerVulnerabilityResult = sh(script: 'docker scan your_docker_image', returnStatus: true)
-//
-//                     if (dockerVulnerabilityResult == 0) {
-//                         echo "Docker vulnerability scan successful."
-//                     } else {
-//                         error "Docker vulnerability scan found issues."
-//                     }
-//
-//                     // Perform SQL injection testing using SQLMap (requires SQLMap installation)
-//                     def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)
-//
-//                     if (sqlMapResult == 0) {
-//                         echo "SQL injection testing with SQLMap successful."
-//                     } else {
-//                         error "SQLMap found SQL injection vulnerabilities."
-//                     }
-//                 }
-//             }
-//         }
+        stage('Dynamic Security Checks') {
+            steps {
+                sh 'echo "Running Dynamic Security Checks..."'
+                script {
+                    // Perform system ports scanning and vulnerability scanning with Nmap
+                    def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
+
+                    if (nmapResult == 0) {
+                        echo "Nmap scan successful. Check 'nmap_output.xml' for results."
+                    } else {
+                        error "Nmap scan failed."
+                    }
+
+                    // Perform Docker vulnerability scanning
+                    def dockerVulnerabilityResult = sh(script: 'docker scan your_docker_image', returnStatus: true)
+
+                    if (dockerVulnerabilityResult == 0) {
+                        echo "Docker vulnerability scan successful."
+                    } else {
+                        error "Docker vulnerability scan found issues."
+                    }
+
+                    // Perform SQL injection testing using SQLMap (requires SQLMap installation)
+                    def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)
+
+                    if (sqlMapResult == 0) {
+                        echo "SQL injection testing with SQLMap successful."
+                    } else {
+                        error "SQLMap found SQL injection vulnerabilities."
+                    }
+                }
+            }
+        }
 
         stage('Check Sensitive Information') {
             steps {

@@ -40,8 +40,8 @@ pipeline {
         }
 
 //         stage('Static Analysis - Java') {
-//                 sh 'echo "Running Static Analysis - Java..."'
 //             steps {
+//                 sh 'echo "Running Static Analysis - Java..."'
 //                 script {
 //                     // Download Checkstyle JAR if not already downloaded (you can reuse the code from the "Download Checkstyle JAR" stage)
 //                     def javaFiles = sh(script: 'find . -name "*.java" -not -path "./src/test/*"', returnStdout: true).trim().split('\n')
@@ -69,8 +69,8 @@ pipeline {
 //         }
 
 //         stage('Dynamic Security Checks') {
-//                 sh 'echo "Running Dynamic Security Checks..."'
 //             steps {
+//                 sh 'echo "Running Dynamic Security Checks..."'
 //                 script {
 //                     // Perform system ports scanning and vulnerability scanning with Nmap
 //                     def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
@@ -103,8 +103,8 @@ pipeline {
 //         }
 
         stage('Check Sensitive Information') {
-            sh 'echo "Checking Sensitive Information..."'
             steps {
+                sh 'echo "Checking Sensitive Information..."'
                 script {
                     // Define the root directory to search in (same directory as the Jenkinsfile)
                     def rootDir = pwd()  // This gets the current directory (where the Jenkinsfile is located)

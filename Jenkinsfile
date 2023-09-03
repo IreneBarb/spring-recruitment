@@ -71,7 +71,7 @@ pipeline {
             steps {
                 script {
                     // Define a regular expression pattern for sensitive information
-                    def sensitivePattern = /\b(?:password|pass|passwd|token|api_key|apikey|secret)\b/i
+                    def sensitivePattern = /\b(?:password|pass|passwd|token|api_key|apikey|secret)\b/
 
                     // Flag to keep track of whether sensitive information is found
                     def sensitiveInfoFound = false

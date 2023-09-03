@@ -70,6 +70,8 @@ pipeline {
         stage('Check Sensitive Information') {
             steps {
                 script {
+                    def rootDir = '/Users/irenebarbouni/Documents/backendRecruitment/backend/src'
+
                     // Define a regular expression pattern for sensitive information
 //                     def sensitivePattern = /\b(?:password|pass|passwd|token|api_key|apikey|secret)\b/
                     def sensitivePattern = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$!%^&*])[A-Za-z\d@#$!%^&*]{8,}/
@@ -78,7 +80,7 @@ pipeline {
                     def sensitiveInfoFound = false
 
                     // Find all files in the workspace
-                    def allFiles = findFiles(glob: '/Users/irenebarbouni/Documents/backendRecruitment/backend/src/**')
+                    def allFiles = findFiles(glob: "${rootDir}/**")
 
                     // Loop through all files and search for sensitive information
                     for (file in allFiles) {

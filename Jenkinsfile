@@ -78,7 +78,7 @@ pipeline {
                     def sensitiveInfoFound = false
 
                     // Find all files in the workspace
-                    def allFiles = findFiles(glob: '**/*')
+                    def allFiles = findFiles(glob: '/Users/irenebarbouni/Documents/backendRecruitment/backend/src/**')
 
                     // Loop through all files and search for sensitive information
                     for (file in allFiles) {

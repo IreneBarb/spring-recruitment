@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Install Homebrew') {
             steps {
-                sh '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+                sh '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
                 sh 'echo "Installed Homebrew"'
             }
         }

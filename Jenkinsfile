@@ -2,7 +2,6 @@ pipeline {
     agent {
             dockerfile {
                 filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'
-                label 'custom-docker-agent'  // Optionally, specify a label for the agent
             }
         }
       tools {

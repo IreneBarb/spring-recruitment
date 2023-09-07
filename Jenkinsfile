@@ -1,18 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            // Specify the custom Docker image tag
+            image 'my-custom-image:latest'  // Use the tag you created
+        }
+    }
 
     stages {
-        stage('Install Homebrew') {
-            steps {
-                sh '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" --yes'
-                sh 'echo "Installed Homebrew"'
-            }
-        }
-        stage('Install Docker') {
-             steps {
-                 sh 'brew install --cask docker'
-             }
-         }
 
         stage('Download Checkstyle JAR') {
             steps {
@@ -84,23 +78,23 @@ pipeline {
             steps {
                 sh 'echo "Running Dynamic Security Checks..."'
                 script {
-//                     // Perform system ports scanning and vulnerability scanning with Nmap
-//                     def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
-//
-//                     if (nmapResult == 0) {
-//                         echo "Nmap scan successful. Check 'nmap_output.xml' for results."
-//                     } else {
-//                         error "Nmap scan failed."
-//                     }
+                    // Perform system ports scanning and vulnerability scanning with Nmap
+                    def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
 
-                    // Perform Docker vulnerability scanning
-                    def dockerVulnerabilityResult = sh(script: 'docker scan your_docker_image', returnStatus: true)
-
-                    if (dockerVulnerabilityResult == 0) {
-                        echo "Docker vulnerability scan successful."
+                    if (nmapResult == 0) {
+                        echo "Nmap scan successful. Check 'nmap_output.xml' for results."
                     } else {
-                        error "Docker vulnerability scan found issues."
+                        error "Nmap scan failed."
                     }
+
+//                     // Perform Docker vulnerability scanning
+//                     def dockerVulnerabilityResult = sh(script: 'docker scan your_docker_image', returnStatus: true)
+//
+//                     if (dockerVulnerabilityResult == 0) {
+//                         echo "Docker vulnerability scan successful."
+//                     } else {
+//                         error "Docker vulnerability scan found issues."
+//                     }
 
                     // Perform SQL injection testing using SQLMap (requires SQLMap installation)
                     def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)

@@ -24,6 +24,21 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image using the Dockerfile in the current directory
+                    def dockerBuildResult = sh(script: 'docker build -t my-custom-image:latest .', returnStatus: true)
+
+                    if (dockerBuildResult == 0) {
+                        echo "Docker image build successful."
+                    } else {
+                        error "Docker image build failed."
+                    }
+                }
+            }
+        }
+
         stage('Download Checkstyle JAR') {
             steps {
                 script {
@@ -94,16 +109,8 @@ pipeline {
             steps {
                 sh 'echo "Running Dynamic Security Checks..."'
                 script {
-                        // Build the Docker image using the Dockerfile in the current directory
-                        def dockerBuildResult = sh(script: 'docker build -t my-custom-image:latest .', returnStatus: true)
-
-                        if (dockerBuildResult == 0) {
-                            echo "Docker image build successful."
-                        } else {
-                            error "Docker image build failed."
-                        }
-//                     def myDockerImage = docker.image('my-custom-image:latest')
-//                     myDockerImage.inside {
+                        def myDockerImage = docker.image('my-custom-image:latest')
+                        myDockerImage.inside {
                         // Perform system ports scanning and vulnerability scanning with Nmap
                         def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
 
@@ -130,7 +137,7 @@ pipeline {
                         } else {
                             error "SQLMap found SQL injection vulnerabilities."
                         }
-//                     }
+                    }
                 }
             }
         }

@@ -94,6 +94,14 @@ pipeline {
             steps {
                 sh 'echo "Running Dynamic Security Checks..."'
                 script {
+                        // Build the Docker image using the Dockerfile in the current directory
+                        def dockerBuildResult = sh(script: 'docker build -t my-custom-image:latest .', returnStatus: true)
+
+                        if (dockerBuildResult == 0) {
+                            echo "Docker image build successful."
+                        } else {
+                            error "Docker image build failed."
+                        }
 //                     def myDockerImage = docker.image('my-custom-image:latest')
 //                     myDockerImage.inside {
                         // Perform system ports scanning and vulnerability scanning with Nmap

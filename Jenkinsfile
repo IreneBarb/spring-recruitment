@@ -1,5 +1,5 @@
 pipeline {
-    agent { dockerfile true }
+    agent any//{ dockerfile true }
       tools {
         // a bit ugly because there is no `@Symbol` annotation for the DockerTool
         // see the discussion about this in PR 77 and PR 52:
@@ -12,6 +12,12 @@ pipeline {
       }
 
     stages {
+
+        stage('Test Docker') {
+            steps {
+                sh 'docker --version'
+            }
+        }
 
         stage('Download Checkstyle JAR') {
             steps {

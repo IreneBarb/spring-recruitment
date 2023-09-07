@@ -83,8 +83,8 @@ pipeline {
             steps {
                 sh 'echo "Running Dynamic Security Checks..."'
                 script {
-//                     def myDockerImage = docker.image('my-custom-image:latest')
-//                     myDockerImage.inside {
+                    def myDockerImage = docker.image('my-custom-image:latest')
+                    myDockerImage.inside {
                         // Perform system ports scanning and vulnerability scanning with Nmap
                         def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
 
@@ -113,7 +113,7 @@ pipeline {
                         }
                     }
                 }
-//             }
+            }
         }
 
         stage('Check Sensitive Information') {

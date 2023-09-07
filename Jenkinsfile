@@ -1,9 +1,10 @@
 pipeline {
-    agent {
-            dockerfile {
-                filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'
-            }
-        }
+    agent any
+//         {
+//             dockerfile {
+//                 filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'
+//             }
+//         }
       tools {
         // a bit ugly because there is no `@Symbol` annotation for the DockerTool
         // see the discussion about this in PR 77 and PR 52:

@@ -12,6 +12,11 @@ pipeline {
       }
 
     stages {
+        stage('Test Docker') {
+            steps {
+                sh 'docker --version'
+            }
+        }
 
         stage('Download Checkstyle JAR') {
             steps {

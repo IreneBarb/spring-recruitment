@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            // Specify the custom Docker image tag
-            image 'my-custom-image:latest'  // Use the tag you created
-        }
-    }
+    agent any
 
     stages {
 

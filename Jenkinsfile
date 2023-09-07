@@ -1,5 +1,10 @@
 pipeline {
-    agent { dockerfile true }
+    agent {
+            dockerfile {
+                filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'
+                label 'custom-docker-agent'  // Optionally, specify a label for the agent
+            }
+        }
       tools {
         // a bit ugly because there is no `@Symbol` annotation for the DockerTool
         // see the discussion about this in PR 77 and PR 52:

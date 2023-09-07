@@ -1,13 +1,9 @@
-# Use a base image suitable for your needs
-FROM ubuntu:latest
+# Use a lightweight base image
+FROM alpine:latest
 
-# Install required packages
-RUN apt-get update && apt-get install -y \
-    docker.io \
-    nmap \
-    sqlmap
-
-# Other setup and configurations if needed
+# Update the package repository and install required packages
+RUN apk update && \
+    apk add nmap sqlmap
 
 # Set the entry point
-CMD ["sleep", "infinity"]
+CMD ["/bin/sh"]

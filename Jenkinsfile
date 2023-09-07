@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { dockerfile true }
       tools {
         // a bit ugly because there is no `@Symbol` annotation for the DockerTool
         // see the discussion about this in PR 77 and PR 52:
@@ -12,17 +12,6 @@ pipeline {
       }
 
     stages {
-
-        stage('Prepare Docker Image') {
-            steps {
-                script {
-                    // Check if the custom Docker image is available, if not, pull or build it
-                    def customImage = docker.image('my-custom-image:latest')
-
-                    def imagePullResult = customImage.pull()
-                }
-            }
-        }
 
         stage('Download Checkstyle JAR') {
             steps {
@@ -94,8 +83,8 @@ pipeline {
             steps {
                 sh 'echo "Running Dynamic Security Checks..."'
                 script {
-                    def myDockerImage = docker.image('my-custom-image:latest')
-                    myDockerImage.inside {
+//                     def myDockerImage = docker.image('my-custom-image:latest')
+//                     myDockerImage.inside {
                         // Perform system ports scanning and vulnerability scanning with Nmap
                         def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
 
@@ -122,7 +111,7 @@ pipeline {
                         } else {
                             error "SQLMap found SQL injection vulnerabilities."
                         }
-                    }
+//                     }
                 }
             }
         }

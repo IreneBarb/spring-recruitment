@@ -12,9 +12,24 @@ pipeline {
       }
 
     stages {
-        stage('Test Docker') {
-            steps {
-                sh 'docker --version'
+
+        steps {
+            script {
+                // Check if the custom Docker image is available, if not, pull or build it
+                def customImage = docker.image('my-custom-image:latest')
+
+                if (!customImage.exists()) {
+                    // Image doesn't exist, pull it from a registry or build it
+                    def imagePullResult = customImage.pull()
+                    if (imagePullResult.isError()) {
+                        // Image pull failed, you can handle this error appropriately
+                        error "Failed to pull the custom Docker image."
+                    } else {
+                        echo "Successfully pulled the custom Docker image."
+                    }
+                } else {
+                    echo "Custom Docker image 'my-custom-image:latest' is already available."
+                }
             }
         }
 

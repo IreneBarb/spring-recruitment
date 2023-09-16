@@ -165,16 +165,24 @@ pipeline {
                 }
             }
         }
-                        // Perform SQL injection testing using SQLMap (requires SQLMap installation)
-//                         def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)
-//
-//                         if (sqlMapResult == 0) {
-//                             echo "SQL injection testing with SQLMap successful."
-//                         } else {
-//                             error "SQLMap found SQL injection vulnerabilities."
-//                         }
-//                     }
-//                 }
+
+        stage('SQL injection testing using SQLMap') {
+            steps {
+                script {
+                // Define the Nmap scan command
+                    def sqlCommand = "sqlmap -r request_file.txt"
+
+                    // Run the Nmap scan inside the running Docker container
+                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${sqlCommand}'", returnStatus: true)
+
+                    if (dockerExecResult == 0) {
+                        echo "Trivy scan inside the Docker container executed successfully."
+                    } else {
+                        error "Failed to execute Trivy scan inside the Docker container."
+                    }
+                }
+            }
+        }
 
         stage('Check Sensitive Information') {
             steps {

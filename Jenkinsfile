@@ -151,12 +151,13 @@ pipeline {
         stage('Docker vulnerability scanning') {
             steps {
                 script {
-                    def dockerVulnerabilityResult = sh(script: 'docker scan my-custom-image', returnStatus: true)
+                    def imageName = "my-custom-image:latest"
+                    def trivyScanResult = sh(script: "trivy image ${imageName}", returnStatus: true)
 
-                    if (dockerVulnerabilityResult == 0) {
-                        echo "Docker vulnerability scan successful."
+                    if (trivyScanResult == 0) {
+                        echo "Trivy vulnerability scan for ${imageName} successful."
                     } else {
-                        error "Docker vulnerability scan found issues."
+                        error "Trivy vulnerability scan found issues for ${imageName}."
                     }
                 }
             }

@@ -64,6 +64,27 @@ pipeline {
             }
         }
 
+        stage('Run SQLMap Inside Docker Container') {
+            steps {
+                script {
+                    def containerName = 'my-container'
+                    def requestFilePath = "${pwd()}/request_file.txt" 
+
+                    // Copy the request_file.txt into the Docker container
+                    sh "docker cp ${requestFilePath} ${containerName}:/path/in/container/request_file.txt"
+
+                    // Run SQLMap inside the container with the copied request_file.txt
+                    def sqlMapResult = sh(script: "docker exec ${containerName} sqlmap -r /path/in/container/request_file.txt", returnStatus: true)
+
+                    if (sqlMapResult == 0) {
+                        echo "SQLMap completed successfully."
+                    } else {
+                        error "SQLMap encountered an error."
+                    }
+                }
+            }
+        }
+
         stage('Download Checkstyle JAR') {
             steps {
                 script {
@@ -176,9 +197,9 @@ pipeline {
                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${sqlCommand}'", returnStatus: true)
 
                     if (dockerExecResult == 0) {
-                        echo "Trivy scan inside the Docker container executed successfully."
+                        echo "SQL injection scan inside the Docker container executed successfully."
                     } else {
-                        error "Failed to execute Trivy scan inside the Docker container."
+                        error "Failed to execute SQL injection scan inside the Docker container."
                     }
                 }
             }

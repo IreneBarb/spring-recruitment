@@ -64,7 +64,7 @@ pipeline {
                         sh "docker cp ${WORKSPACE}/request_file.txt my-container:/files/request_file.txt"
 
                         // You may need to add a delay here to ensure the copy completes
-                        sleep time: 10, unit: 'SECONDS'
+                        sleep time: 2, unit: 'SECONDS'
                     } else {
                         error "Failed to start Docker container."
                     }
@@ -72,26 +72,22 @@ pipeline {
             }
         }
 
-//         stage('Run SQLMap Inside Docker Container') {
-//             steps {
-//                 script {
-//                     def containerName = 'my-container'
-//                     def requestFilePath = "${pwd()}/request_file.txt"
-//
-//                     // Copy the request_file.txt into the Docker container
-//                     sh "docker cp ${requestFilePath} ${containerName}:/path/in/container/request_file.txt"
-//
-//                     // Run SQLMap inside the container with the copied request_file.txt
-//                     def sqlMapResult = sh(script: "docker exec ${containerName} sqlmap -r /path/in/container/request_file.txt", returnStatus: true)
-//
-//                     if (sqlMapResult == 0) {
-//                         echo "SQLMap completed successfully."
-//                     } else {
-//                         error "SQLMap encountered an error."
-//                     }
-//                 }
-//             }
-//         }
+        stage('Run SQLMap Inside Docker Container') {
+            steps {
+                script {
+                    def containerName = 'my-container'
+
+                    // Run SQLMap inside the container with the copied request_file.txt
+                    def sqlMapResult = sh(script: "docker exec ${containerName} sqlmap -r /files/request_file.txt", returnStatus: true)
+
+                    if (sqlMapResult == 0) {
+                        echo "SQLMap completed successfully."
+                    } else {
+                        error "SQLMap encountered an error."
+                    }
+                }
+            }
+        }
 
         stage('Download Checkstyle JAR') {
             steps {

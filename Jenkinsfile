@@ -111,6 +111,15 @@ pipeline {
                 script {
                         def myDockerImage = docker.image('my-custom-image:latest')
                         myDockerImage.inside {
+
+                        // Check if Nmap is installed
+                        def nmapInstalled = sh(script: 'command -v nmap', returnStatus: true)
+
+                        if (nmapInstalled == 0) {
+                            echo "Nmap is installed in the Docker image."
+                        } else {
+                           error "Nmap is not installed in the Docker image."
+                        }
                         // Perform system ports scanning and vulnerability scanning with Nmap
                         def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
 

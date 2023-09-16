@@ -151,13 +151,16 @@ pipeline {
         stage('Docker vulnerability scanning') {
             steps {
                 script {
-                    def imageName = "my-custom-image:latest"
-                    def trivyScanResult = sh(script: "trivy image ${imageName}", returnStatus: true)
+                // Define the Nmap scan command
+                    def trivyCommand = "trivy image my-custom-image:latest"
 
-                    if (trivyScanResult == 0) {
-                        echo "Trivy vulnerability scan for ${imageName} successful."
+                    // Run the Nmap scan inside the running Docker container
+                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${trivyCommand}'", returnStatus: true)
+
+                    if (dockerExecResult == 0) {
+                        echo "Trivy scan inside the Docker container executed successfully."
                     } else {
-                        error "Trivy vulnerability scan found issues for ${imageName}."
+                        error "Failed to execute Trivy scan inside the Docker container."
                     }
                 }
             }

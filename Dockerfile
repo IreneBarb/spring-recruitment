@@ -9,10 +9,10 @@ RUN apt-get update && apt-get install -y \
     wget \
     gnupg
 
-# Download and install Trivy
-RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0.19.2_Linux-64bit.deb && \
-    dpkg -i trivy_0.19.2_Linux-64bit.deb && \
-    rm trivy_0.19.2_Linux-64bit.deb
+# Download and install Trivy for arm64
+RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0.19.2_Linux-arm64.deb && \
+    dpkg -i trivy_0.19.2_Linux-arm64.deb && \
+    rm trivy_0.19.2_Linux-arm64.deb
 
 # Set the entry point
 CMD ["sleep", "infinity"]

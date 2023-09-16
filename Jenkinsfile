@@ -18,9 +18,20 @@ pipeline {
 
     stages {
 
-        stage('Test Docker') {
+         stage('Download Checkstyle JAR') {
             steps {
-                sh 'docker --version'
+                script {
+                    def response = httpRequest(
+                        url: 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar',
+                        httpMode: 'GET',
+                        outputFile: 'checkstyle.jar'
+                    )
+                    if (response.status == 200) {
+                        echo "Download successful"
+                    } else {
+                        error "Failed to download Checkstyle JAR"
+                    }
+                }
             }
         }
 
@@ -72,57 +83,9 @@ pipeline {
             }
         }
 
-        stage('Run SQLMap Inside Docker Container') {
-            steps {
-                script {
-                    def containerName = 'my-container'
-
-                    // Run SQLMap inside the container with the copied request_file.txt
-                    def sqlMapResult = sh(script: "docker exec ${containerName} sqlmap -r /files/request_file.txt", returnStatus: true)
-
-                    if (sqlMapResult == 0) {
-                        echo "SQLMap completed successfully."
-                    } else {
-                        error "SQLMap encountered an error."
-                    }
-                }
-            }
-        }
-
-        stage('Download Checkstyle JAR') {
-            steps {
-                script {
-                    def response = httpRequest(
-                        url: 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar',
-                        httpMode: 'GET',
-                        outputFile: 'checkstyle.jar'
-                    )
-                    if (response.status == 200) {
-                        echo "Download successful"
-                    } else {
-                        error "Failed to download Checkstyle JAR"
-                    }
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('Build') {
-            steps {
-                // Add your build commands here
-                sh 'echo "Building the project..."'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                // Add your testing commands here
-                sh 'echo "Running tests..."'
             }
         }
 
@@ -191,19 +154,18 @@ pipeline {
 //             }
 //         }
 
-        stage('SQL injection testing using SQLMap') {
+        stage('Sql injection testing') {
             steps {
                 script {
-                // Define the Nmap scan command
-                    def sqlCommand = "sqlmap -r request_file.txt"
+                    def containerName = 'my-container'
 
-                    // Run the Nmap scan inside the running Docker container
-                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${sqlCommand}'", returnStatus: true)
+                    // Run SQLMap inside the container with the copied request_file.txt
+                    def sqlMapResult = sh(script: "docker exec ${containerName} sqlmap -r /files/request_file.txt", returnStatus: true)
 
-                    if (dockerExecResult == 0) {
-                        echo "SQL injection scan inside the Docker container executed successfully."
+                    if (sqlMapResult == 0) {
+                        echo "SQLMap completed successfully."
                     } else {
-                        error "Failed to execute SQL injection scan inside the Docker container."
+                        error "SQLMap encountered an error."
                     }
                 }
             }

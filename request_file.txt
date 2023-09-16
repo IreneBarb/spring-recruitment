@@ -1,6 +1,15 @@
-GET /api/appointments HTTP/1.1
+PUT /api/candidates/1 HTTP/1.1
 Host: localhost:8080
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 28
+Content-Type: application/json
+Content-Length: XX
+
+{
+    "username": "updated_username",
+    "password": "updated_password",
+    "firstName": "Updated",
+    "lastName": "Candidate",
+    "email": "updated.email@example.com",
+    "birthDate": "1995-02-15"
+}
 
 product_id=1&product_name=Widget

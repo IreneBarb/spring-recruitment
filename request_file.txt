@@ -1,6 +1,2 @@
 GET /api/appointments HTTP/1.1
 Host: localhost:8080
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 28
-
-product_id=1&product_name=Widget

@@ -150,13 +150,17 @@ pipeline {
 
         stage('Docker vulnerability scanning') {
             steps {
-                def dockerVulnerabilityResult = sh(script: 'docker scan my-custom-image', returnStatus: true)
+                script {
+                    def dockerVulnerabilityResult = sh(script: 'docker scan my-custom-image', returnStatus: true)
 
-                if (dockerVulnerabilityResult == 0) {
-                    echo "Docker vulnerability scan successful."
-                } else {
-                    error "Docker vulnerability scan found issues."
+                    if (dockerVulnerabilityResult == 0) {
+                        echo "Docker vulnerability scan successful."
+                    } else {
+                        error "Docker vulnerability scan found issues."
+                    }
                 }
+            }
+        }
                         // Perform SQL injection testing using SQLMap (requires SQLMap installation)
 //                         def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)
 //
@@ -167,8 +171,6 @@ pipeline {
 //                         }
 //                     }
 //                 }
-            }
-        }
 
         stage('Check Sensitive Information') {
             steps {

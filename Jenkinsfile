@@ -39,6 +39,33 @@ pipeline {
             }
         }
 
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run a Docker container using the image you built
+                    def dockerRunResult = sh(script: 'docker run -d --name my-container my-custom-image:latest', returnStatus: true)
+
+                    if (dockerRunResult == 0) {
+                        echo "Docker container started successfully."
+                    } else {
+                        error "Failed to start Docker container."
+                    }
+                }
+            }
+        }
+
+        // Add more stages as needed, using the Docker container as necessary
+
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Stop and remove the Docker container when you're done
+                    sh 'docker stop my-container'
+                    sh 'docker rm my-container'
+                }
+            }
+        }
+
         stage('Download Checkstyle JAR') {
             steps {
                 script {

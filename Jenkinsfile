@@ -58,8 +58,10 @@ pipeline {
                     if (dockerRunResult == 0) {
                         echo "Docker container started successfully."
 
+                        def createPathResult = sh(script: "docker exec my-container mkdir -p /files", returnStatus: true)
+
                         // Copy the file from the Jenkins workspace to the container
-                        sh "docker cp ${WORKSPACE}/request_file.txt my-container:/path/in/container/request_file.txt"
+                        sh "docker cp ${WORKSPACE}/request_file.txt my-container:/files/request_file.txt"
 
                         // You may need to add a delay here to ensure the copy completes
                         sleep time: 10, unit: 'SECONDS'

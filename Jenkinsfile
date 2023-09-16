@@ -59,7 +59,7 @@ pipeline {
                         echo "Docker container started successfully."
 
                         // Copy the file from the Jenkins workspace to the container
-                        sh 'docker cp $(pwd())/request_file.txt my-container:/path/in/container/request_file.txt'
+                        sh "docker cp ${WORKSPACE}/request_file.txt my-container:/path/in/container/request_file.txt"
 
                         // You may need to add a delay here to ensure the copy completes
                         sleep time: 10, unit: 'SECONDS'

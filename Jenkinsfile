@@ -23,6 +23,16 @@ pipeline {
                 sh 'docker --version'
             }
         }
+        
+         stage('Cleanup') {
+            steps {
+                script {
+                    // Stop and remove the Docker container when you're done
+                    sh 'docker stop my-container'
+                    sh 'docker rm my-container'
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -229,16 +239,5 @@ pipeline {
                 sh 'echo "Deploying the application..."'
             }
         }
-
-        stage('Cleanup') {
-            steps {
-                script {
-                    // Stop and remove the Docker container when you're done
-                    sh 'docker stop my-container'
-                    sh 'docker rm my-container'
-                }
-            }
-        }
-
     }
 }

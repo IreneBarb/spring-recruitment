@@ -122,7 +122,7 @@ pipeline {
             steps {
                 script {
                     // Define the Nmap scan command
-                    def nmapCommand = "nmap -p 80-443 127.0.0.1"
+                    def nmapCommand = "nmap -p 80-10000 127.0.0.1"
 
                     // Run the Nmap scan inside the running Docker container
                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)

@@ -54,18 +54,6 @@ pipeline {
             }
         }
 
-        // Add more stages as needed, using the Docker container as necessary
-
-        stage('Cleanup') {
-            steps {
-                script {
-                    // Stop and remove the Docker container when you're done
-                    sh 'docker stop my-container'
-                    sh 'docker rm my-container'
-                }
-            }
-        }
-
         stage('Download Checkstyle JAR') {
             steps {
                 script {
@@ -223,5 +211,16 @@ pipeline {
                 sh 'echo "Deploying the application..."'
             }
         }
+
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Stop and remove the Docker container when you're done
+                    sh 'docker stop my-container'
+                    sh 'docker rm my-container'
+                }
+            }
+        }
+
     }
 }

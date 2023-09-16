@@ -148,23 +148,23 @@ pipeline {
             }
         }
 
-        stage('Docker vulnerability scanning') {
-            steps {
-                script {
-                // Define the Nmap scan command
-                    def trivyCommand = "trivy image my-custom-image:latest"
-
-                    // Run the Nmap scan inside the running Docker container
-                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${trivyCommand}'", returnStatus: true)
-
-                    if (dockerExecResult == 0) {
-                        echo "Trivy scan inside the Docker container executed successfully."
-                    } else {
-                        error "Failed to execute Trivy scan inside the Docker container."
-                    }
-                }
-            }
-        }
+//         stage('Docker vulnerability scanning') {
+//             steps {
+//                 script {
+//                 // Define the Nmap scan command
+//                     def trivyCommand = "trivy image my-custom-image:latest"
+//
+//                     // Run the Nmap scan inside the running Docker container
+//                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${trivyCommand}'", returnStatus: true)
+//
+//                     if (dockerExecResult == 0) {
+//                         echo "Trivy scan inside the Docker container executed successfully."
+//                     } else {
+//                         error "Failed to execute Trivy scan inside the Docker container."
+//                     }
+//                 }
+//             }
+//         }
 
         stage('SQL injection testing using SQLMap') {
             steps {

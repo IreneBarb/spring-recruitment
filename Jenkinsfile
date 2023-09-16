@@ -64,24 +64,6 @@ pipeline {
             }
         }
 
-        stage('Run Nmap Scan Inside Docker Container') {
-            steps {
-                script {
-                    // Define the Nmap scan command
-                    def nmapCommand = "nmap -p 80-443 127.0.0.1"
-
-                    // Run the Nmap scan inside the running Docker container
-                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)
-
-                    if (dockerExecResult == 0) {
-                        echo "Nmap scan inside the Docker container executed successfully."
-                    } else {
-                        error "Failed to execute Nmap scan inside the Docker container."
-                    }
-                }
-            }
-        }
-
         stage('Download Checkstyle JAR') {
             steps {
                 script {
@@ -148,49 +130,43 @@ pipeline {
 //             }
 //         }
 
-        stage('Dynamic Security Checks') {
+        stage('Run Nmap Scan Inside Docker Container') {
             steps {
-                sh 'echo "Running Dynamic Security Checks..."'
                 script {
-                        def myDockerImage = docker.image('my-custom-image:latest')
-                        myDockerImage.inside {
+                    // Define the Nmap scan command
+                    def nmapCommand = "nmap -p 80-443 127.0.0.1"
 
-                        // Check if Nmap is installed
-                        def nmapInstalled = sh(script: 'command -v nmap', returnStatus: true)
+                    // Run the Nmap scan inside the running Docker container
+                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)
 
-                        if (nmapInstalled == 0) {
-                            echo "Nmap is installed in the Docker image."
-                        } else {
-                           error "Nmap is not installed in the Docker image."
-                        }
-                        // Perform system ports scanning and vulnerability scanning with Nmap
-                        def nmapResult = sh(script: 'nmap -Pn -p1-65535 -T4 -A -oX nmap_output.xml target_host', returnStatus: true)
-
-                        if (nmapResult == 0) {
-                            echo "Nmap scan successful. Check 'nmap_output.xml' for results."
-                        } else {
-                            error "Nmap scan failed."
-                        }
-
-    //                     // Perform Docker vulnerability scanning
-    //                     def dockerVulnerabilityResult = sh(script: 'docker scan your_docker_image', returnStatus: true)
-    //
-    //                     if (dockerVulnerabilityResult == 0) {
-    //                         echo "Docker vulnerability scan successful."
-    //                     } else {
-    //                         error "Docker vulnerability scan found issues."
-    //                     }
-
-                        // Perform SQL injection testing using SQLMap (requires SQLMap installation)
-                        def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)
-
-                        if (sqlMapResult == 0) {
-                            echo "SQL injection testing with SQLMap successful."
-                        } else {
-                            error "SQLMap found SQL injection vulnerabilities."
-                        }
+                    if (dockerExecResult == 0) {
+                        echo "Nmap scan inside the Docker container executed successfully."
+                    } else {
+                        error "Failed to execute Nmap scan inside the Docker container."
                     }
                 }
+            }
+        }
+
+        stage('Docker vulnerability scanning') {
+            steps {
+                def dockerVulnerabilityResult = sh(script: 'docker scan my-custom-image', returnStatus: true)
+
+                if (dockerVulnerabilityResult == 0) {
+                    echo "Docker vulnerability scan successful."
+                } else {
+                    error "Docker vulnerability scan found issues."
+                }
+                        // Perform SQL injection testing using SQLMap (requires SQLMap installation)
+//                         def sqlMapResult = sh(script: 'sqlmap -r request_file.txt', returnStatus: true)
+//
+//                         if (sqlMapResult == 0) {
+//                             echo "SQL injection testing with SQLMap successful."
+//                         } else {
+//                             error "SQLMap found SQL injection vulnerabilities."
+//                         }
+//                     }
+//                 }
             }
         }
 

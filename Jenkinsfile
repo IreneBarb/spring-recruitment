@@ -23,7 +23,7 @@ pipeline {
                 sh 'docker --version'
             }
         }
-        
+
          stage('Cleanup') {
             steps {
                 script {
@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     // Define the Nmap scan command
-                    def nmapCommand = "nmap -p 80-443 target_host_or_ip"
+                    def nmapCommand = "nmap -p 80-443 127.0.0.1"
 
                     // Run the Nmap scan inside the running Docker container
                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)

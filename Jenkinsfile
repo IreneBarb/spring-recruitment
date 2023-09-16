@@ -54,6 +54,24 @@ pipeline {
             }
         }
 
+        stage('Run Nmap Scan Inside Docker Container') {
+            steps {
+                script {
+                    // Define the Nmap scan command
+                    def nmapCommand = "nmap -p 80-443 target_host_or_ip"
+
+                    // Run the Nmap scan inside the running Docker container
+                    def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)
+
+                    if (dockerExecResult == 0) {
+                        echo "Nmap scan inside the Docker container executed successfully."
+                    } else {
+                        error "Failed to execute Nmap scan inside the Docker container."
+                    }
+                }
+            }
+        }
+
         stage('Download Checkstyle JAR') {
             steps {
                 script {

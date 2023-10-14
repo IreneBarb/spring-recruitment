@@ -72,7 +72,7 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 sh 'rm trufflehog || true'
-                sh 'brew install trufflesecurity/trufflehog/trufflehog'
+                sh 'pip install trufflehog'
                 sh 'cat trufflehog'
             }
         }

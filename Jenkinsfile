@@ -14,35 +14,6 @@ pipeline {
 
     stages {
 
-                stage('Static Analysis - Java') {
-                            steps {
-                                sh 'echo "Running Static Analysis - Java..."'
-                                script {
-                                    // Download Checkstyle JAR if not already downloaded (you can reuse the code from the "Download Checkstyle JAR" stage)
-                                    def javaFiles = sh(script: 'find . -name "*.java" -not -path "./src/test/*"', returnStdout: true).trim().split('\n')
-                                    def checkstyleResults = [:]
-
-                                    for (filePath in javaFiles) {
-                                        def fileName = filePath.tokenize('/').last()
-                                        echo "Running Checkstyle on ${filePath}"
-                                        def checkstyleOutput = sh(script: "java -jar checkstyle.jar -c sun_checks.xml ${filePath}", returnStdout: true, returnStatus: true)
-
-                                        if (checkstyleOutput == 0) {
-                                            checkstyleResults[fileName] = "No Checkstyle issues found"
-                                        } else {
-                                            checkstyleResults[fileName] = "Checkstyle issues found"
-                                        }
-                                    }
-
-                                    // Display Checkstyle results summary
-                                    echo "Checkstyle Results:"
-                                    checkstyleResults.each { fileName, result ->
-                                        echo "${fileName}: ${result}"
-                                    }
-                                }
-                            }
-                        }
-
          stage('Download Checkstyle JAR') {
             steps {
                 script {
@@ -205,6 +176,35 @@ pipeline {
                 }
             }
         }
+
+        //         stage('Static Analysis - Java') {
+        //             steps {
+        //                 sh 'echo "Running Static Analysis - Java..."'
+        //                 script {
+        //                     // Download Checkstyle JAR if not already downloaded (you can reuse the code from the "Download Checkstyle JAR" stage)
+        //                     def javaFiles = sh(script: 'find . -name "*.java" -not -path "./src/test/*"', returnStdout: true).trim().split('\n')
+        //                     def checkstyleResults = [:]
+        //
+        //                     for (filePath in javaFiles) {
+        //                         def fileName = filePath.tokenize('/').last()
+        //                         echo "Running Checkstyle on ${filePath}"
+        //                         def checkstyleOutput = sh(script: "java -jar checkstyle.jar -c sun_checks.xml ${filePath}", returnStdout: true, returnStatus: true)
+        //
+        //                         if (checkstyleOutput == 0) {
+        //                             checkstyleResults[fileName] = "No Checkstyle issues found"
+        //                         } else {
+        //                             checkstyleResults[fileName] = "Checkstyle issues found"
+        //                         }
+        //                     }
+        //
+        //                     // Display Checkstyle results summary
+        //                     echo "Checkstyle Results:"
+        //                     checkstyleResults.each { fileName, result ->
+        //                         echo "${fileName}: ${result}"
+        //                     }
+        //                 }
+        //             }
+        //         }
 
         stage('Deploy') {
             steps {

@@ -77,6 +77,8 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
+                sh 'docker stop sonarqube'
+                sh 'docker rm sonarqube'
                 sh 'docker pull sonarqube:latest'
                 sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://localhost:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
                 sh 'docker run --rm -e SONAR_HOST_URL=http://localhost:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v https://github.com/IreneBarb/spring-recruitment.git:/src/main sonarsource/sonar-scanner-cli'

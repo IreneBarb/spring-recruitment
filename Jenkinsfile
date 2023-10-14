@@ -14,23 +14,6 @@ pipeline {
 
     stages {
 
-//          stage('Download Checkstyle JAR') {
-//             steps {
-//                 script {
-//                     def response = httpRequest(
-//                         url: 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar',
-//                         httpMode: 'GET',
-//                         outputFile: 'checkstyle.jar'
-//                     )
-//                     if (response.status == 200) {
-//                         echo "Download successful"
-//                     } else {
-//                         error "Failed to download Checkstyle JAR"
-//                     }
-//                 }
-//             }
-//         }
-
          stage('Cleanup') {
             steps {
                 script {

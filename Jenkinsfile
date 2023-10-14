@@ -68,16 +68,16 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.MsBuildInstallation'
-                    withSonarQubeEnv('SonarQubeServer') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
-            }
-        }
+//         stage('SonarQube Analysis') {
+//             steps {
+//                 script {
+//                     def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.MsBuildInstallation'
+//                     withSonarQubeEnv('SonarQubeServer') {
+//                         sh "${scannerHome}/bin/sonar-scanner"
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Run Nmap Scan Inside Docker Container') {
             steps {

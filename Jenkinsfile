@@ -7,6 +7,7 @@ pipeline {
 //         }
       tools {
         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'Docker 18.09.0'
+        truffleHog 'TruffleHog'
       }
       environment {
         DOCKER_CERT_PATH = credentials('id-for-a-docker-cred')

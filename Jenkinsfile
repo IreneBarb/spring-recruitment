@@ -72,7 +72,7 @@ pipeline {
                     steps {
                         script {
                             def truffleHogCommand = """
-                            trufflehog --regex --entropy=False --json --rules path/to/custom-secrets.json .
+                            trufflehog --regex --entropy=False --json --rules custom-secrets.json .
                             """
                             def truffleHogOutput = sh(script: truffleHogCommand, returnStatus: true)
 

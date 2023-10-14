@@ -68,16 +68,23 @@ pipeline {
             }
         }
 
-//         stage('SonarQube Analysis') {
-//             steps {
-//                 script {
-//                     def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.MsBuildInstallation'
-//                     withSonarQubeEnv('SonarQubeServer') {
-//                         sh "${scannerHome}/bin/sonar-scanner"
-//                     }
-//                 }
-//             }
-//         }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Define the path to the SonarQube Scanner executable in your Docker container
+                    def sonarScannerPath = '/opt/sonarqube/SonarQube.MSBuild.Runner-0.9/SonarQube.MSBuild.Runner.exe'
+
+                    // Run SonarQube analysis inside the Docker container
+                    def dockerExecResult = sh(script: "docker exec my-container ${sonarScannerPath}", returnStatus: true)
+
+                    if (dockerExecResult == 0) {
+                        echo "SonarQube analysis completed successfully."
+                    } else {
+                        error "Failed to execute SonarQube analysis."
+                    }
+                }
+            }
+        }
 
         stage('Run Nmap Scan Inside Docker Container') {
             steps {

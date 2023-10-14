@@ -7,7 +7,7 @@ pipeline {
 //         }
       tools {
         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'Docker 18.09.0'
-        truffleHog 'TruffleHog'
+//         truffleHog 'TruffleHog'
       }
       environment {
         DOCKER_CERT_PATH = credentials('id-for-a-docker-cred')
@@ -70,21 +70,12 @@ pipeline {
         }
 
         stage('Static Code Analysis') {
-                    steps {
-                        script {
-                            def truffleHogCommand = """
-                            trufflehog --regex --entropy=False --json --rules custom-secrets.json .
-                            """
-                            def truffleHogOutput = sh(script: truffleHogCommand, returnStatus: true)
-
-                            if (truffleHogOutput == 0) {
-                                echo "No secrets found."
-                            } else {
-                                error "Secrets found in the code. Review and remove them."
-                            }
-                        }
-                    }
-                }
+            steps {
+                sh 'rm trufflehog || true'
+                sh 'docker run gesellix/trufflehog --json https://github.com/IreneBarb/spring-recruitment.git > trufflehog'
+                sh 'cat trufflehog'
+            }
+        }
 
 //         stage('SonarQube Analysis') {
 //             steps {

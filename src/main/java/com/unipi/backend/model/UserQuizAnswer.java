@@ -1,6 +1,9 @@
 package com.unipi.backend.model;
 
 
+import com.unipi.backend.repository.QuestionsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 
 @Entity
@@ -57,4 +60,5 @@ public class UserQuizAnswer {
     public void setSelectedOption(Long selectedOption) {
         this.selectedOption = selectedOption;
     }
+
 }

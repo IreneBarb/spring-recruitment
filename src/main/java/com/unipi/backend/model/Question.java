@@ -1,6 +1,9 @@
 package com.unipi.backend.model;
 
 
+import com.unipi.backend.repository.JobSkillRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,7 +15,7 @@ public class Question {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-    private Long id;
+    private Integer id;
     private String questionText;
     private String option1;
     private String option2;
@@ -21,11 +24,12 @@ public class Question {
     @Column
     private int correctOption;
     private int quizId;
+    private int skillId;
 
     public Question() {
     }
 
-    public Question(String questionText, String option1, String option2, String option3, String option4, int correctOption, int quizId) {
+    public Question(String questionText, String option1, String option2, String option3, String option4, int correctOption, int quizId, int skillId) {
         this.questionText = questionText;
         this.option1 = option1;
         this.option2 = option2;
@@ -33,13 +37,14 @@ public class Question {
         this.option4 = option4;
         this.correctOption = correctOption;
         this.quizId = quizId;
+        this.skillId = skillId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -98,4 +103,13 @@ public class Question {
     public void setQuizId(int quizId) {
         this.quizId = quizId;
     }
+
+    public int getSkillId() {
+        return this.skillId;
+    }
+
+    public void setSkillId(int skillId) {
+        this.skillId = skillId;
+    }
+
 }

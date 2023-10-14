@@ -77,8 +77,8 @@ pipeline {
 
         stage('SonarQube Analysis - static code analyzer') {
             steps {
-//                 sh 'docker stop sonarqube'
-//                 sh 'docker rm sonarqube'
+                sh 'docker stop sonarqube'
+                sh 'docker rm sonarqube'
                 sh 'hostname'
                 sh 'docker pull sonarqube:latest'
                 sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://MBP-Irene.home:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'

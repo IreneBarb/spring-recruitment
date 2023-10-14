@@ -17,9 +17,13 @@ RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0
 RUN apt-get update && apt-get install -y unzip
 
 # Install SonarQube
-RUN wget https://binaries.sonarsource.com/Distribution/SonarQube.MSBuild.Runner-0.9.zip && \
-    unzip SonarQube.MSBuild.Runner-0.9.zip && \
-    mv SonarQube.MSBuild.Runner-0.9 /opt/sonarqube
+RUN wget https://binaries.sonarsource.com/Distribution/SonarQube.MSBuild.Runner-0.9.zip
+
+# Clean up any remnants
+RUN rm -rf SonarQube.MSBuild.Runner-0.9
+
+# Extract the archive
+RUN unzip SonarQube.MSBuild.Runner-0.9.zip -d /opt/sonarqube
 
 # Set the entry point
 CMD ["sleep", "infinity"]

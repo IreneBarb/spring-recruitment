@@ -14,5 +14,10 @@ RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0
     dpkg -i trivy_0.19.2_Linux-arm64.deb && \
     rm trivy_0.19.2_Linux-arm64.deb
 
+# Install SonarQube
+RUN wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.4.0.22115.zip && \
+    unzip sonarqube-9.4.0.22115.zip && \
+    mv sonarqube-9.4.0.22115 /opt/sonarqube
+
 # Set the entry point
 CMD ["sleep", "infinity"]

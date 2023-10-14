@@ -72,7 +72,7 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 sh 'rm trufflehog || true'
-                sh 'docker run --platform linux/arm64 gesellix/trufflehog --json https://github.com/IreneBarb/spring-recruitment.git > trufflehog'
+                sh 'docker run --platform linux/arm64 --rm -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo https://github.com/trufflesecurity/test_keys'
                 sh 'cat trufflehog'
             }
         }

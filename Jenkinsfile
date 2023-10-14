@@ -72,7 +72,7 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 sh 'rm trufflehog || true'
-                sh 'docker run gesellix/trufflehog --json https://github.com/IreneBarb/spring-recruitment.git > trufflehog'
+                sh 'docker run --platform linux/arm64 gesellix/trufflehog --json https://github.com/IreneBarb/spring-recruitment.git > trufflehog'
                 sh 'cat trufflehog'
             }
         }

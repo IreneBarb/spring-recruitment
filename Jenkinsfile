@@ -14,15 +14,15 @@ pipeline {
 
     stages {
 
-//          stage('Cleanup') {
-//             steps {
-//                 script {
-//                     // Stop and remove the Docker container when you're done
-//                     sh 'docker stop my-container'
-//                     sh 'docker rm my-container'
-//                 }
-//             }
-//         }
+         stage('Cleanup') {
+            steps {
+                script {
+                    // Stop and remove the Docker container when you're done
+                    sh 'docker stop my-container'
+                    sh 'docker rm my-container'
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -71,16 +71,28 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Define the path to the SonarQube Scanner executable in your Docker container
-                    def sonarScannerPath = '/opt/sonarqube/SonarQube.MSBuild.Runner.exe'
+                    def scannerImage = 'sonarsource/sonar-scanner-cli'
 
-                    // Run SonarQube analysis inside the Docker container
-                    def dockerExecResult = sh(script: "docker exec my-container ${sonarScannerPath}", returnStatus: true)
+                    // Define the SonarQube server URL and authentication token
+                    def sonarHostUrl = "http://localhost:9000"
+                    def sonarAuthToken = "admin"
 
-                    if (dockerExecResult == 0) {
+                    // Define the path to your repository source code
+                    ddef repoPath = "${WORKSPACE}"
+
+                    // Run the SonarQube Scanner Docker container
+                    def dockerRunResult = sh(script: """
+                        docker run --rm \
+                            -e SONAR_HOST_URL="${sonarHostUrl}" \
+                            -e SONAR_LOGIN="${sonarAuthToken}" \
+                            -v "${repoPath}:/usr/src" \
+                            ${scannerImage}
+                    """, returnStatus: true)
+
+                    if (dockerRunResult == 0) {
                         echo "SonarQube analysis completed successfully."
                     } else {
-                        error "Failed to execute SonarQube analysis."
+                        error "SonarQube analysis encountered an error."
                     }
                 }
             }

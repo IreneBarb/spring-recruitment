@@ -14,16 +14,16 @@ RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0
     dpkg -i trivy_0.19.2_Linux-arm64.deb && \
     rm trivy_0.19.2_Linux-arm64.deb
 
-RUN apt-get update && apt-get install -y unzip
+#RUN apt-get update && apt-get install -y unzip
 
 # Install SonarQube
-RUN wget https://binaries.sonarsource.com/Distribution/SonarQube.MSBuild.Runner-0.9.zip
+#RUN wget https://binaries.sonarsource.com/Distribution/SonarQube.MSBuild.Runner-0.9.zip
 
 # Extract the archive
-RUN unzip SonarQube.MSBuild.Runner-0.9.zip -d /opt/sonarqube
+#RUN unzip SonarQube.MSBuild.Runner-0.9.zip -d /opt/sonarqube
 
 # Make the SonarQube Scanner executable
-RUN chmod +x /opt/sonarqube/SonarQube.MSBuild.Runner.exe
+#RUN chmod +x /opt/sonarqube/SonarQube.MSBuild.Runner.exe
 
 # Set the entry point
 CMD ["sleep", "infinity"]

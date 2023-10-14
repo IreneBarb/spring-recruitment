@@ -7,7 +7,6 @@ pipeline {
 //         }
       tools {
         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'Docker 18.09.0'
-//         truffleHog 'TruffleHog'
       }
       environment {
         DOCKER_CERT_PATH = credentials('id-for-a-docker-cred')
@@ -76,35 +75,13 @@ pipeline {
             }
         }
 
-//         stage('SonarQube Analysis') {
-//             steps {
-//                 script {
-//                     def scannerImage = 'sonarsource/sonar-scanner-cli'
-//
-//                     // Define the SonarQube server URL and authentication token
-//                     def sonarHostUrl = "http://localhost:9000"
-//                     def sonarAuthToken = "admin"
-//
-//                     // Define the path to your repository source code
-//                     ddef repoPath = "${WORKSPACE}"
-//
-//                     // Run the SonarQube Scanner Docker container
-//                     def dockerRunResult = sh(script: """
-//                         docker run --rm \
-//                             -e SONAR_HOST_URL="${sonarHostUrl}" \
-//                             -e SONAR_LOGIN="${sonarAuthToken}" \
-//                             -v "${repoPath}:/usr/src" \
-//                             ${scannerImage}
-//                     """, returnStatus: true)
-//
-//                     if (dockerRunResult == 0) {
-//                         echo "SonarQube analysis completed successfully."
-//                     } else {
-//                         error "SonarQube analysis encountered an error."
-//                     }
-//                 }
-//             }
-//         }
+        stage('SonarQube Analysis') {
+            steps {
+                sh 'docker pull sonarqube:latest'
+                sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://localhost:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
+                sh 'docker run --rm -e SONAR_HOST_URL=http://localhost:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v https://github.com/IreneBarb/spring-recruitment.git:/usr/src sonarsource/sonar-scanner-cli'
+            }
+        }
 
         stage('Run Nmap Scan Inside Docker Container') {
             steps {

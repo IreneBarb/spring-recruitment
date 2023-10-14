@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
                     // Define the path to the SonarQube Scanner executable in your Docker container
-                    def sonarScannerPath = '/opt/sonarqube/SonarQube.MSBuild.Runner-0.9/SonarQube.MSBuild.Runner.exe'
+                    def sonarScannerPath = '/opt/sonarqube/SonarQube/SonarQube.MSBuild.Runner.exe'
 
                     // Run SonarQube analysis inside the Docker container
                     def dockerExecResult = sh(script: "docker exec my-container ${sonarScannerPath}", returnStatus: true)

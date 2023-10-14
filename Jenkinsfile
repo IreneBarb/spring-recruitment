@@ -14,22 +14,22 @@ pipeline {
 
     stages {
 
-         stage('Download Checkstyle JAR') {
-            steps {
-                script {
-                    def response = httpRequest(
-                        url: 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar',
-                        httpMode: 'GET',
-                        outputFile: 'checkstyle.jar'
-                    )
-                    if (response.status == 200) {
-                        echo "Download successful"
-                    } else {
-                        error "Failed to download Checkstyle JAR"
-                    }
-                }
-            }
-        }
+//          stage('Download Checkstyle JAR') {
+//             steps {
+//                 script {
+//                     def response = httpRequest(
+//                         url: 'https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.44/checkstyle-8.44-all.jar',
+//                         httpMode: 'GET',
+//                         outputFile: 'checkstyle.jar'
+//                     )
+//                     if (response.status == 200) {
+//                         echo "Download successful"
+//                     } else {
+//                         error "Failed to download Checkstyle JAR"
+//                     }
+//                 }
+//             }
+//         }
 
          stage('Cleanup') {
             steps {
@@ -85,6 +85,17 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.MsBuildInstallation'
+                    withSonarQubeEnv('SonarQubeServer') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
         stage('Run Nmap Scan Inside Docker Container') {
             steps {
                 script {
@@ -113,24 +124,6 @@ pipeline {
             }
         }
 
-//         stage('Docker vulnerability scanning') {
-//             steps {
-//                 script {
-//                 // Define the Nmap scan command
-//                     def trivyCommand = "trivy image my-custom-image:latest"
-//
-//                     // Run the Nmap scan inside the running Docker container
-//                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${trivyCommand}'", returnStatus: true)
-//
-//                     if (dockerExecResult == 0) {
-//                         echo "Trivy scan inside the Docker container executed successfully."
-//                     } else {
-//                         error "Failed to execute Trivy scan inside the Docker container."
-//                     }
-//                 }
-//             }
-//         }
-
         stage('Sql injection testing') {
             steps {
                 script {
@@ -147,35 +140,6 @@ pipeline {
                 }
             }
         }
-
-                stage('Static Analysis - Java') {
-                            steps {
-                                sh 'echo "Running Static Analysis - Java..."'
-                                script {
-                                    // Download Checkstyle JAR if not already downloaded (you can reuse the code from the "Download Checkstyle JAR" stage)
-                                    def javaFiles = sh(script: 'find . -name "*.java" -not -path "./src/test/*"', returnStdout: true).trim().split('\n')
-                                    def checkstyleResults = [:]
-
-                                    for (filePath in javaFiles) {
-                                        def fileName = filePath.tokenize('/').last()
-                                        echo "Running Checkstyle on ${filePath}"
-                                        def checkstyleOutput = sh(script: "java -jar checkstyle.jar -c sun_checks.xml ${filePath}", returnStdout: true, returnStatus: true)
-
-                                        if (checkstyleOutput == 0) {
-                                            checkstyleResults[fileName] = "No Checkstyle issues found"
-                                        } else {
-                                            checkstyleResults[fileName] = "Checkstyle issues found"
-                                        }
-                                    }
-
-                                    // Display Checkstyle results summary
-                                    echo "Checkstyle Results:"
-                                    checkstyleResults.each { fileName, result ->
-                                        echo "${fileName}: ${result}"
-                                    }
-                                }
-                            }
-                        }
 
         stage('Check Sensitive Information') {
             steps {

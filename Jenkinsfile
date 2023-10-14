@@ -68,6 +68,23 @@ pipeline {
             }
         }
 
+        stage('Static Code Analysis') {
+                    steps {
+                        script {
+                            def truffleHogCommand = """
+                            trufflehog --regex --entropy=False --json --rules path/to/custom-secrets.json .
+                            """
+                            def truffleHogOutput = sh(script: truffleHogCommand, returnStatus: true)
+
+                            if (truffleHogOutput == 0) {
+                                echo "No secrets found."
+                            } else {
+                                error "Secrets found in the code. Review and remove them."
+                            }
+                        }
+                    }
+                }
+
 //         stage('SonarQube Analysis') {
 //             steps {
 //                 script {

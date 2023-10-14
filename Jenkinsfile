@@ -68,17 +68,18 @@ pipeline {
             }
         }
 
-        stage('Static Code Analysis') {
+        stage('Sensitive information') {
             steps {
                 sh 'rm trufflehog || true'
                 sh 'docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo https://github.com/IreneBarb/spring-recruitment.git'
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('SonarQube Analysis - static code analyzer') {
             steps {
                 sh 'docker stop sonarqube'
                 sh 'docker rm sonarqube'
+                sh 'hostname -I'
                 sh 'docker pull sonarqube:latest'
                 sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://localhost:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
                 sh 'docker run --rm -e SONAR_HOST_URL=http://localhost:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v https://github.com/IreneBarb/spring-recruitment.git sonarsource/sonar-scanner-cli'

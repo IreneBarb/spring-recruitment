@@ -94,10 +94,14 @@ pipeline {
 //                     sh 'make'
 //                     sh 'make install'
 //                     sh 'git clone https://github.com/nmap/nmap.git'
-                    sh 'cd nmap'
-                    sh 'ls'
+                    sh 'cd nmap'   // Change to the "nmap" directory
+                    sh './autogen.sh'   // Run the autogen script
+                    sh './configure'   // Configure the build
+                    sh 'make'   // Build Nmap
+                    sh 'sudo make install'   // Install Nmap
+
 //                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
-                    sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
+//                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
                 }
             }
         }

@@ -90,7 +90,7 @@ pipeline {
                 script {
 //                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
 //                     sh 'tar -xzvf nmap-*.tar.gz'
-                       sh 'rpm -i nmap-7.94-1.x86_64.rpm'
+                       sh 'yum install yum'
 //                     sh 'git clone https://github.com/nmap/nmap.git'
 //                     sh 'cd nmap'
 //                     sh 'ls'

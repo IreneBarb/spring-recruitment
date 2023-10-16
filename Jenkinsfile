@@ -75,13 +75,23 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis - static code analyzer') {
+//         stage('SonarQube Analysis - static code analyzer') {
+//             steps {
+//                 sh 'docker stop sonarqube'
+//                 sh 'docker rm sonarqube'
+//                 sh 'docker pull sonarqube:latest'
+//                 sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
+//                 sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
+//             }
+//         }
+
+        stage('Run Nmap Scan') {
             steps {
-                sh 'docker stop sonarqube'
-                sh 'docker rm sonarqube'
-                sh 'docker pull sonarqube:latest'
-                sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
-                sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
+                script {
+                    docker.image('instrumentisto/nmap').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                        sh 'nmap -Pn -A -T4 -F 127.0.0.1>'
+                    }
+                }
             }
         }
 

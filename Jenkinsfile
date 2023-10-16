@@ -88,7 +88,7 @@ pipeline {
         stage('Run Nmap Scan') {
             steps {
                 script {
-                    sh 'docker run --rm instrumentisto/nmap -Pn -A -T4 -F 127.0.0.1'
+                    sh 'ddocker run --rm -it instrumentisto/nmap -sV --script nmap-vulners/ 127.0.0.1'
                 }
             }
         }

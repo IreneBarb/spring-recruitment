@@ -95,7 +95,7 @@ pipeline {
 //                     sh 'make install'
 //                     sh 'git clone https://github.com/nmap/nmap.git'
                     sh 'cd nmap'
-                    sh './autogen.sh'
+                    sh './configure'
 //                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
                 }

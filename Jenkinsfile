@@ -88,9 +88,7 @@ pipeline {
         stage('Run Nmap Scan') {
             steps {
                 script {
-                    docker.image('instrumentisto/nmap').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
-                        sh 'nmap -Pn -A -T4 -F 127.0.0.1>'
-                    }
+                    sh 'docker run --rm instrumentisto/nmap -Pn -A -T4 -F 127.0.0.1'
                 }
             }
         }

@@ -88,7 +88,8 @@ pipeline {
         stage('Run Nmap Scan') {
             steps {
                 script {
-                    sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
+                    sh 'git clone https://github.com/nmap/nmap.git'
+//                     sh 'tar -xzvf nmap-*.tar.gz'
                     sh './configure'
                     sh 'make'
                     sh 'make install'

@@ -92,7 +92,7 @@ pipeline {
 //                     sh 'tar -xzvf nmap-*.tar.gz'
                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
                        sh 'chmod +x install_homebrew.sh'
-                       sh './install_homebrew.sh'
+                       sh './install_homebrew.sh -y'
 //                     sh 'ls'
 //                     sh './autogen.sh'   // Run the autogen script
 //                     sh './configure'   // Configure the build

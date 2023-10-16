@@ -88,8 +88,9 @@ pipeline {
         stage('Run Nmap Scan') {
             steps {
                 script {
-                    sh 'apt-get install nmap'
-                    sh 'cd /usr/share/nmap/scripts/'
+                    sh 'cat /etc/os-release'
+//                     sh 'apt-get install nmap'
+//                     sh 'cd /usr/share/nmap/scripts/'
                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
                 }

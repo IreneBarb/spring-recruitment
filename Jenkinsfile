@@ -89,8 +89,9 @@ pipeline {
             steps {
                 script {
                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
-//                     sh 'apt-get install nmap'
-//                     sh 'cd /usr/share/nmap/scripts/'
+                    sh './configure'
+                    sh 'make'
+                    sh 'make install'
                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
                 }

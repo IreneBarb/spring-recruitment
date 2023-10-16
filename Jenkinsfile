@@ -94,8 +94,9 @@ pipeline {
 //                     sh 'make'
 //                     sh 'make install'
 //                     sh 'git clone https://github.com/nmap/nmap.git'
-                    sh 'cd nmap'   // Change to the "nmap" directory
-                    sh 'ls -R'
+                    sh 'cd nmap'
+                    sh 'cd nmap'
+                    sh 'ls'
 //                     sh './autogen.sh'   // Run the autogen script
 //                     sh './configure'   // Configure the build
 //                     sh 'make'   // Build Nmap

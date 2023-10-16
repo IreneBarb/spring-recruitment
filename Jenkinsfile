@@ -88,7 +88,8 @@ pipeline {
         stage('Run Nmap Scan') {
             steps {
                 script {
-                    sh 'cat /etc/os-release'
+                    sh 'apk update'
+                    sh 'apk add nmap'
 //                     sh 'apt-get install nmap'
 //                     sh 'cd /usr/share/nmap/scripts/'
                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'

@@ -91,7 +91,7 @@ pipeline {
 //                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
 //                     sh 'tar -xzvf nmap-*.tar.gz'
                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
-//                     sh 'git clone https://github.com/nmap/nmap.git'
+                       sh 'chmod +x install_homebrew.sh'
 //                     sh 'cd nmap'
 //                     sh 'ls'
 //                     sh './autogen.sh'   // Run the autogen script

@@ -17,7 +17,7 @@ pipeline {
          stage('Cleanup') {
             steps {
                 script {
-                    sh 'cat /etc/os-release'
+                    sh 'lsb_release -a'
                     // Stop and remove the Docker container when you're done
                     sh 'docker stop my-container'
                     sh 'docker rm my-container'

@@ -92,7 +92,7 @@ pipeline {
 //                     sh 'tar -xzvf nmap-*.tar.gz'
                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
                        echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users//irenebarbouni//.zshrc
-                       eval "$(/opt/homebrew/bin/brew shellenv)"
+                       eval '$(/opt/homebrew/bin/brew shellenv)'
 //                        sh 'chmod +x install_homebrew.sh'
 //                        sh './install_homebrew.sh -y'
 //                     sh 'ls'

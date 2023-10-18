@@ -85,25 +85,25 @@ pipeline {
 //             }
 //         }
 
-        stage('Run Nmap Scan') {
-            steps {
-                script {
-                    sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
-                    sh 'tar -xzvf nmap-7.94-1.x86_64.rpm.gz'
-//                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
-//                        sh 'chmod +x install_homebrew.sh'
-//                        sh './install_homebrew.sh -y'
-//                     sh 'ls'
-//                     sh './autogen.sh'   // Run the autogen script
-//                     sh './configure'   // Configure the build
-//                     sh 'make'   // Build Nmap
-//                     sh 'sudo make install'   // Install Nmap
-
+//         stage('Run Nmap Scan') {
+//             steps {
+//                 script {
+//                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
+//                     sh 'tar -xzvf nmap-7.94-1.x86_64.rpm.gz'
+// //                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
+// //                        sh 'chmod +x install_homebrew.sh'
+// //                        sh './install_homebrew.sh -y'
+// //                     sh 'ls'
+// //                     sh './autogen.sh'   // Run the autogen script
+// //                     sh './configure'   // Configure the build
+// //                     sh 'make'   // Build Nmap
+// //                     sh 'sudo make install'   // Install Nmap
+//
 //                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
-                    sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
-                }
-            }
-        }
+//                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
+//                 }
+//             }
+//         }
 
         stage('trivy vulnerabilities scan') {
             steps {
@@ -120,7 +120,7 @@ pipeline {
                     // Define the Nmap scan command
                     def nmapCommand = "nmap 8-p 0-10000 127.0.0.1"
 
-                    def nmapVulnerabilitiesCommand = "nmap -sV --script vulners 127.0.0.1"
+                    def nmapVulnerabilitiesCommand = "nmap -sV --script nmap-vulners/ 127.0.0.1"
 
                     // Run the Nmap scan inside the running Docker container
                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)

@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
 # Clone your GitHub repository into the container
 RUN git clone https://github.com/IreneBarb/spring-recruitment.git
 
+RUN git clone https://github.com/vulnersCom/nmap-vulners.git
+
 # Download and install Trivy for arm64
 RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0.19.2_Linux-arm64.deb && \
     dpkg -i trivy_0.19.2_Linux-arm64.deb && \

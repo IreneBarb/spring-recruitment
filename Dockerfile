@@ -28,5 +28,12 @@ RUN wget https://github.com/aquasecurity/trivy/releases/download/v0.19.2/trivy_0
 # Make the SonarQube Scanner executable
 #RUN chmod +x /opt/sonarqube/SonarQube.MSBuild.Runner.exe
 
+# Download and install Nmap Vulners script
+RUN mkdir -p /usr/share/nmap/scripts
+RUN wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse -P /usr/share/nmap/scripts
+
+# Make the script executable
+RUN chmod +x /usr/share/nmap/scripts/vulners.nse
+
 # Set the entry point
 CMD ["sleep", "infinity"]

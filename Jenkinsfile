@@ -111,7 +111,7 @@ pipeline {
                     // Define the Nmap scan command
                     def nmapCommand = "nmap 8-p 0-10000 127.0.0.1"
 
-                    def nmapVulnerabilitiesCommand = "nmap -sV --script nmap-vulners/ 127.0.0.1"
+                    def nmapVulnerabilitiesCommand = "nmap -sV --script nmap-vulners 127.0.0.1"
 
                     // Run the Nmap scan inside the running Docker container
                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${nmapCommand}'", returnStatus: true)

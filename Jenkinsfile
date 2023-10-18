@@ -91,7 +91,7 @@ pipeline {
 //                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
 //                     sh 'tar -xzvf nmap-*.tar.gz'
                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
-                       echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/irenebarbouni/.zshrc
+                       echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users//irenebarbouni//.zshrc
                        eval "$(/opt/homebrew/bin/brew shellenv)"
 //                        sh 'chmod +x install_homebrew.sh'
 //                        sh './install_homebrew.sh -y'

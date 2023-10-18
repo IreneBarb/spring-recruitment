@@ -89,7 +89,7 @@ pipeline {
             steps {
                 script {
                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
-                    sh 'tar -xzvf nmap-*.tar.gz'
+                    sh 'tar -xzvf nmap-7.94-1.x86_64.rpm.tar.gz'
 //                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
 //                        sh 'chmod +x install_homebrew.sh'
 //                        sh './install_homebrew.sh -y'

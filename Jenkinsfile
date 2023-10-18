@@ -77,11 +77,20 @@ pipeline {
 
         stage('SonarQube Analysis - static code analyzer') {
             steps {
-                sh 'docker stop sonarqube'
-                sh 'docker rm sonarqube'
-                sh 'docker pull sonarqube:latest'
-                sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
-                sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
+                script {
+                    // Stop and remove the existing SonarQube container
+                    sh 'docker stop sonarqube'
+                    sh 'docker rm sonarqube'
+
+                    // Pull the custom ARM64-compatible SonarQube image
+                    sh 'docker pull nevishs/sonarqube-arm64:8.9.4'
+
+                    // Start SonarQube container using the custom image
+                    sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar nevishs/sonarqube-arm64:8.9.4'
+
+                    // Run the SonarScanner analysis
+                    sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
+                }
             }
         }
 

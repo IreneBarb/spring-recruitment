@@ -14,15 +14,15 @@ pipeline {
 
     stages {
 
-//          stage('Cleanup') {
-//             steps {
-//                 script {
-//                     // Stop and remove the Docker container when you're done
-//                     sh 'docker stop my-container'
-//                     sh 'docker rm my-container'
-//                 }
-//             }
-//         }
+         stage('Cleanup') {
+            steps {
+                script {
+                    // Stop and remove the Docker container when you're done
+                    sh 'docker stop my-container'
+                    sh 'docker rm my-container'
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -44,7 +44,6 @@ pipeline {
                 script {
                     // Run a Docker container using the image you built
                     def dockerRunResult = sh(script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock -d --name my-container my-custom-image:latest', returnStatus: true)
-//                     def dockerRunResult = sh(script: 'docker run -d --name my-container my-custom-image:latest', returnStatus: true)
 
                     if (dockerRunResult == 0) {
                         echo "Docker container started successfully."
@@ -86,27 +85,27 @@ pipeline {
 //             }
 //         }
 
-//         stage('Run Nmap Scan') {
-//             steps {
-//                 script {
-// //                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
-// //                     sh 'tar -xzvf nmap-*.tar.gz'
+        stage('Run Nmap Scan') {
+            steps {
+                script {
+                    sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
+                    sh 'tar -xzvf nmap-*.tar.gz'
 //                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
 //                        sh 'chmod +x install_homebrew.sh'
 //                        sh './install_homebrew.sh -y'
-// //                     sh 'ls'
-// //                     sh './autogen.sh'   // Run the autogen script
-// //                     sh './configure'   // Configure the build
-// //                     sh 'make'   // Build Nmap
-// //                     sh 'sudo make install'   // Install Nmap
-//
-// //                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
-//                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
-//                 }
-//             }
-//         }
+//                     sh 'ls'
+//                     sh './autogen.sh'   // Run the autogen script
+//                     sh './configure'   // Configure the build
+//                     sh 'make'   // Build Nmap
+//                     sh 'sudo make install'   // Install Nmap
 
-        stage('trivy scan') {
+//                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
+                    sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
+                }
+            }
+        }
+
+        stage('trivy vulnerabilities scan') {
             steps {
                 script {
                     def command = 'trivy image --format json --output results.json my-custom-image:latest'

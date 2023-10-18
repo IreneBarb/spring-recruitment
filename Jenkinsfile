@@ -105,6 +105,14 @@ pipeline {
 //             }
 //         }
 
+        stage('trivy scan') {
+            steps {
+                script {
+                    sh 'trivy image --format json --output results.json my-custom-image:latest'
+                }
+            }
+        }
+
         stage('Run Nmap Scan Inside Docker Container') {
             steps {
                 script {

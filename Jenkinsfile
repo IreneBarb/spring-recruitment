@@ -43,7 +43,8 @@ pipeline {
             steps {
                 script {
                     // Run a Docker container using the image you built
-                    def dockerRunResult = sh(script: 'docker run -d --name my-container my-custom-image:latest', returnStatus: true)
+                    def dockerRunResult = sh(script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock -d my-custom-image:latest', returnStatus: true)
+//                     def dockerRunResult = sh(script: 'docker run -d --name my-container my-custom-image:latest', returnStatus: true)
 
                     if (dockerRunResult == 0) {
                         echo "Docker container started successfully."

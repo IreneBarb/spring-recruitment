@@ -75,35 +75,15 @@ pipeline {
             }
         }
 
-//         stage('SonarQube Analysis - static code analyzer') {
-//             steps {
-//                 sh 'docker stop sonarqube'
-//                 sh 'docker rm sonarqube'
-//                 sh 'docker pull sonarqube:latest'
-//                 sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
-//                 sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
-//             }
-//         }
-
-//         stage('Run Nmap Scan') {
-//             steps {
-//                 script {
-//                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
-//                     sh 'tar -xzvf nmap-7.94-1.x86_64.rpm.gz'
-// //                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
-// //                        sh 'chmod +x install_homebrew.sh'
-// //                        sh './install_homebrew.sh -y'
-// //                     sh 'ls'
-// //                     sh './autogen.sh'   // Run the autogen script
-// //                     sh './configure'   // Configure the build
-// //                     sh 'make'   // Build Nmap
-// //                     sh 'sudo make install'   // Install Nmap
-//
-//                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
-//                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
-//                 }
-//             }
-//         }
+        stage('SonarQube Analysis - static code analyzer') {
+            steps {
+                sh 'docker stop sonarqube'
+                sh 'docker rm sonarqube'
+                sh 'docker pull sonarqube:latest'
+                sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar sonarqube:latest'
+                sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
+            }
+        }
 
         stage('trivy vulnerabilities scan') {
             steps {

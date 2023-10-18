@@ -108,7 +108,7 @@ pipeline {
         stage('trivy scan') {
             steps {
                 script {
-                    def command = "trivy image --format json --output results.json my-custom-image:latest"
+                    def command = 'trivy image --format json --output results.json my-custom-image:latest'
                     def dockerExecResult = sh(script: "docker exec my-container sh -c '${command}'", returnStatus: true)
                 }
             }

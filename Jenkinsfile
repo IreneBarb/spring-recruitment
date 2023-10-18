@@ -85,25 +85,25 @@ pipeline {
 //             }
 //         }
 
-        stage('Run Nmap Scan') {
-            steps {
-                script {
-//                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
-//                     sh 'tar -xzvf nmap-*.tar.gz'
-                       sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
-                       sh 'chmod +x install_homebrew.sh'
-                       sh './install_homebrew.sh -y'
-//                     sh 'ls'
-//                     sh './autogen.sh'   // Run the autogen script
-//                     sh './configure'   // Configure the build
-//                     sh 'make'   // Build Nmap
-//                     sh 'sudo make install'   // Install Nmap
-
-//                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
-                    sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
-                }
-            }
-        }
+//         stage('Run Nmap Scan') {
+//             steps {
+//                 script {
+// //                     sh 'curl -LO https://nmap.org/dist/nmap-7.94-1.x86_64.rpm'
+// //                     sh 'tar -xzvf nmap-*.tar.gz'
+//                        sh 'curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o install_homebrew.sh'
+//                        sh 'chmod +x install_homebrew.sh'
+//                        sh './install_homebrew.sh -y'
+// //                     sh 'ls'
+// //                     sh './autogen.sh'   // Run the autogen script
+// //                     sh './configure'   // Configure the build
+// //                     sh 'make'   // Build Nmap
+// //                     sh 'sudo make install'   // Install Nmap
+//
+// //                     sh 'git clone https://github.com/vulnersCom/nmap-vulners.git'
+//                     sh 'nmap -sV --script nmap-vulners/ 127.0.0.1'
+//                 }
+//             }
+//         }
 
         stage('Run Nmap Scan Inside Docker Container') {
             steps {

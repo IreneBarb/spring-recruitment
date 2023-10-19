@@ -1,10 +1,5 @@
 pipeline {
     agent any
-//         {
-//             dockerfile {
-//                 filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'
-//             }
-//         }
       tools {
         'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'Docker 18.09.0'
         maven 'maven-3.9.5'

@@ -64,17 +64,16 @@ pipeline {
             }
         }
 
-//         stage('Sensitive information') {
-//             steps {
-//                 sh 'rm trufflehog || true'
-//                 sh 'docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo https://github.com/IreneBarb/spring-recruitment.git'
-//             }
-//         }
+        stage('Sensitive information') {
+            steps {
+                sh 'rm trufflehog || true'
+                sh 'docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo https://github.com/IreneBarb/spring-recruitment.git'
+            }
+        }
 
         stage('SonarQube Analysis - static code analyzer') {
             steps {
                 withSonarQubeEnv(installationName: 'sq1'){
-//                     sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
                     sh 'mvn sonar:sonar'
                 }
             }
@@ -129,45 +128,6 @@ pipeline {
                         echo "SQLMap completed successfully."
                     } else {
                         error "SQLMap encountered an error."
-                    }
-                }
-            }
-        }
-
-        stage('Check Sensitive Information') {
-            steps {
-                sh 'echo "Checking Sensitive Information..."'
-                script {
-                    // Define the root directory to search in (same directory as the Jenkinsfile)
-                    def rootDir = pwd()  // This gets the current directory (where the Jenkinsfile is located)
-
-                    // Define the subdirectory you want to search in (src folder)
-                    def subdirectory = 'src'
-
-                    // Define a regular expression pattern for sensitive information
-                    def sensitivePattern = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$!%^&*])[A-Za-z\d@#$!%^&*]{8,}/
-
-                    // Flag to keep track of whether sensitive information is found
-                    def sensitiveInfoFound = false
-
-                    // Find all files in the workspace, try to exclude .class files or include files only inside src folder
-                    def allFiles = findFiles(glob: '**/*')
-
-                    // Loop through all files and search for sensitive information
-                    for (file in allFiles) {
-                        def filePath = file.path
-                        def fileContents = readFile(filePath)
-
-                        if (fileContents =~ sensitivePattern) {
-                            echo "Sensitive information found in ${filePath}"
-                            sensitiveInfoFound = true
-                        }
-                    }
-
-                    if (sensitiveInfoFound) {
-                        error "Sensitive information found in one or more files. Aborting the build."
-                    } else {
-                        echo "No sensitive information found."
                     }
                 }
             }

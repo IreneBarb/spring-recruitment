@@ -74,7 +74,8 @@ pipeline {
         stage('SonarQube Analysis - static code analyzer') {
             steps {
                 withSonarQubeEnv(installationName: 'sq1'){
-                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
+//                     sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
+                    sh 'mvn sonar:sonar'
                 }
 //                     docker run \
 //                         --rm \

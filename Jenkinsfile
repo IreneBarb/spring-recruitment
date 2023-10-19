@@ -1,5 +1,6 @@
 pipeline {
-    agent any
+//     agent any
+        agent{ label: 'linux' }
 //         {
 //             dockerfile {
 //                 filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'

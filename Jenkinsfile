@@ -77,14 +77,6 @@ pipeline {
 //                     sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
                     sh 'mvn sonar:sonar'
                 }
-//                     docker run \
-//                         --rm \
-//                         -e SONAR_HOST_URL="http://127.0.0.1:9000" \
-//                         -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=${YOUR_PROJECT_KEY}" \
-//                         -e SONAR_LOGIN="squ_66fd7f20862579789e074fcce1bbeff8773907af" \
-//                         -v "https://github.com/IreneBarb/spring-recruitment.git:/usr/src" \
-//                         sonarsource/sonar-scanner-cli
-//                 }
             }
         }
 

@@ -73,18 +73,9 @@ pipeline {
 
         stage('SonarQube Analysis - static code analyzer') {
             steps {
-                script {
-                   // Use the configured SonarQube scanner
-                   def scannerHome = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                   withSonarQubeEnv(installationName: 'sq1') {
-                       sh "${scannerHome}/bin/sonar-scanner"
-                   }
-               }
-
-//                 {
-//                     withSonarQubeEnv(installationName: 'sq1'){
-//                         sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
-//                     }
+                withSonarQubeEnv(installationName: 'sq1'){
+                    sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
+                }
 //                     docker run \
 //                         --rm \
 //                         -e SONAR_HOST_URL="http://127.0.0.1:9000" \

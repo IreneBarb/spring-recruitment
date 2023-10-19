@@ -1,6 +1,9 @@
 pipeline {
-    agent any
-//       agent { label: 'linux' }
+//     agent any
+      agent { label: 'linux' }
+      options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+      }
 //         {
 //             dockerfile {
 //                 filename '/Users/irenebarbouni/Documents/backendRecruitment/backend/Dockerfile'

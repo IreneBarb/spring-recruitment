@@ -74,9 +74,17 @@ pipeline {
         stage('SonarQube Analysis - static code analyzer') {
             steps {
                 script {
-                    withSonarQubeEnv(installationName: 'sq1'){
-                        sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
-                    }
+                   // Use the configured SonarQube scanner
+                   def scannerHome = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                   withSonarQubeEnv(installationName: 'sq1') {
+                       sh "${scannerHome}/bin/sonar-scanner"
+                   }
+               }
+
+//                 {
+//                     withSonarQubeEnv(installationName: 'sq1'){
+//                         sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
+//                     }
 //                     docker run \
 //                         --rm \
 //                         -e SONAR_HOST_URL="http://127.0.0.1:9000" \
@@ -84,7 +92,7 @@ pipeline {
 //                         -e SONAR_LOGIN="squ_66fd7f20862579789e074fcce1bbeff8773907af" \
 //                         -v "https://github.com/IreneBarb/spring-recruitment.git:/usr/src" \
 //                         sonarsource/sonar-scanner-cli
-                }
+//                 }
             }
         }
 

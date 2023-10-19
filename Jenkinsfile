@@ -74,22 +74,16 @@ pipeline {
         stage('SonarQube Analysis - static code analyzer') {
             steps {
                 script {
-//                     // Stop and remove the existing SonarQube container
-//                     sh 'docker stop sonarqube'
-//                     sh 'docker rm sonarqube'
-//
-//                     // Pull the custom ARM64-compatible SonarQube image
-//                     sh 'docker pull nevishs/sonarqube-arm64:8.9.4'
-//
-//                     // Start SonarQube container using the custom image
-//                     sh 'docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 -e SONARQUBE_JDBC_URL=jdbc:h2:tcp://192.168.1.249:9092/sonar -e SONARQUBE_JDBC_USERNAME=sonar -e SONARQUBE_JDBC_PASSWORD=sonar --user 1000:1000 nevishs/sonarqube-arm64:8.9.4'
-//
-//                     // Run the SonarScanner analysis
-//                     sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
-
-                    withSonarQubeEnv(installationName: 'sq1'){
-                        sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
-                    }
+//                     withSonarQubeEnv(installationName: 'sq1'){
+//                         sh 'mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
+//                     }
+                    docker run \
+                        --rm \
+                        -e SONAR_HOST_URL="http://127.0.0.1:9000" \
+                        -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=${YOUR_PROJECT_KEY}" \
+                        -e SONAR_LOGIN="squ_66fd7f20862579789e074fcce1bbeff8773907af" \
+                        -v "https://github.com/IreneBarb/spring-recruitment.git:/usr/src" \
+                        sonarsource/sonar-scanner-cli
                 }
             }
         }

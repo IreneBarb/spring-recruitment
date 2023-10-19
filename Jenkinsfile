@@ -88,7 +88,7 @@ pipeline {
 //                     sh 'docker run --rm -e SONAR_HOST_URL=http://192.168.1.249:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin -v "$PWD:/src" sonarsource/sonar-scanner-cli'
 
                     withSonarQubeEnv(installationName: 'sq1'){
-                        sh '.mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
+                        sh '.mvn clean org.sonarsource.scanner.maven:sonar-maven-plugin:2.16.1:sonar'
                     }
                 }
             }

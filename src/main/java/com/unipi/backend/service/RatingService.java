@@ -39,6 +39,7 @@ public class RatingService {
             // Calculate the score for this question
             double questionScore = (selectedOption == correctOption) ? 1.0 : 0.0;
 
+
             // Add the question's score to the skill's total score
             skillScores.put(skillId, skillScores.getOrDefault(skillId, 0.0) + questionScore);
         }
